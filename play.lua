@@ -18,10 +18,9 @@ end
 
 function play.draw()
    love.graphics.setColor(255,255,255)
-
    for i = 1,#field do
-      for j = 1,#field[i] do
-	 love.graphics.print(field[i][j],j*8,i*5)
+      if field[i][j] == 1 then
+	 love.graphics.rectangle("fill", j*8, i*10, 10, 10)
       end
    end
    

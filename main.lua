@@ -84,9 +84,7 @@ function love.keypressed(key, unicode)
    if key == "escape" then love.event.quit() end
 
    if key == "r" then 
-      print(rot.." before")
       rot = ((rot) % 4) + 1
-      print(rot)
    end
    
    -- keypressed[key] = true
