@@ -13,6 +13,7 @@ function love.load()
    require "class"
    require "menu"
    require "play"
+   require "blocks"
    settings = love.filesystem.load("settings.lua")()
 
    scale = 4
@@ -81,6 +82,13 @@ end
 
 function love.keypressed(key, unicode)
    if key == "escape" then love.event.quit() end
+
+   if key == "r" then 
+      print(rot.." before")
+      rot = ((rot) % 4) + 1
+      print(rot)
+   end
+   
    -- keypressed[key] = true
    -- if key == "p" then useShader = not useShader end
 end
