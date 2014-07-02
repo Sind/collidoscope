@@ -3,8 +3,8 @@ binding.pressed = {}
 binding.isDown = {}
 binding.map = {p1u = "w", p1d = "s", p1l = "a", p1r= "d", p2u = "up", p2d = "down", p2l = "left", p2r= "right",start="return"}
 function binding.update()
-			for k,v in pairs(binding.map) do
-				binding.pressed[k] = love.keyboard.isDown(binding.map[k]) and not binding.isDown[k]
-				binding.isDown[k] = love.keyboard.isDown(binding.map[k])
-			end
+   for k,v in pairs(binding.map) do
+      binding.pressed[k] = love.keyboard.isDown(binding.map[k]) and not binding.isDown[k]
+      binding.isDown[k] = love.keyboard.isDown(binding.map[k])
+   end
 end
