@@ -11,13 +11,13 @@ function play.load()
 end
 
 function play.update(dt)
-
+   
 end
 
 function play.draw()
    for i = 1,#field do
       for j = 1,#field[i] do
-	 love.graphics.print(field[i][j],j*8,i*10)
+	 love.graphics.print(field[i][j],j*8,i*5)
       end
    end
 

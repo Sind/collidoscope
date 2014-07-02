@@ -4,10 +4,10 @@ PHYSICS_FPS = 1/60
 TILE_WIDTH = 8
 TILE_HEIGHT = TILE_WIDTH
 
-FIELD_SIZE_X,FIELD_SIZE_Y = 10,16 
+FIELD_SIZE_X,FIELD_SIZE_Y = 10,32
 
 function love.load()
-   love.graphics.setDefaultFilter("nearest", "nearest")
+   love.graphics.setDefaultFilter("linear", "linear")
    require "binding"
    require "helpfuncs"
    require "class"
@@ -15,14 +15,14 @@ function love.load()
    require "play"
    settings = love.filesystem.load("settings.lua")()
 
-   scale = 3
+   scale = 4
    love.graphics.setBackgroundColor(100,100,100,255)
 
-   love.window.setMode(320*scale,240*scale,{fsaa = 0, vsync = true})
+   love.window.setMode(320*scale,240*scale,{ fsaa = 0, vsync = true })
    accumulator= 0
    -- keypressed = {}
    i = 0
-   game = {play = play,menu = menu}
+   game = { play = play,menu = menu }
    mode = "play"
    init = true
    mCan = love.graphics.newCanvas(320,240)
