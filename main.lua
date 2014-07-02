@@ -4,21 +4,21 @@ PHYSICS_FPS = 1/60
 TILE_WIDTH = 8
 TILE_HEIGHT = TILE_WIDTH
 
-FIELD_SIZE_X,FIELD_SIZE_Y = 10,16 
+FIELD_SIZE_X,FIELD_SIZE_Y = 10,20 
 
 function love.load()
-	love.graphics.setDefaultFilter("nearest", "nearest")
 	require "binding"
 	require "helpfuncs"
 	require "class"
+	require "blocks"
 	require "menu"
 	require "play"
 	settings = love.filesystem.load("settings.lua")()
 
-	scale = 3
 	love.graphics.setBackgroundColor(100,100,100,255)
 
-	love.window.setMode(320*scale,240*scale,{fsaa = 0, vsync = true})
+
+	resetView()
 	accumulator= 0
 	-- keypressed = {}
 	i = 0
@@ -73,7 +73,7 @@ function love.draw()
 		-- end
 		-- love.graphics.setColor(255,100,134,255)
 		love.graphics.setColor(255,255,255,255)
-		love.graphics.draw(mCan,0,0,0,scale)
+		love.graphics.draw(mCan,0,0,0,settings.scale)
 		-- love.graphics.setShader()
 	end
 end
