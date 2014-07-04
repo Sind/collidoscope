@@ -40,6 +40,8 @@ function play.load()
 	play._load_layer('bg_light')
 	play._load_layer('bg_dark')
 	
+	play.shader = love.graphics.newShader("glowystuff.frag")
+	
 end
 function play._load_layer(name)
 
