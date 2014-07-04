@@ -85,5 +85,5 @@ function play._do_draw(scheme_name)
 	love.graphics.draw(scheme.background)
 
 	-- draw decorations
-	love.graphics.rectangle("fill", layout.center_x, layout.center_y, layout.percent_x(20), layout.percent_y(20))
+	layout.rect(20, 20, 40, 40)
 end
