@@ -85,5 +85,7 @@ function play._do_draw(scheme_name)
 	love.graphics.draw(scheme.background)
 
 	-- draw decorations
-	layout.rect(20, 20, 40, 40)
+	layout.rect(50, 50, 100, 3.7)
+	layout.rect(4.48, 50, 2.86, 92.6)
+	layout.rect(100-4.48, 50, 2.86, 92.6)
 end
