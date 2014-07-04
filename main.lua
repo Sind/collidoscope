@@ -7,8 +7,10 @@ TILE_HEIGHT = TILE_WIDTH
 FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
 SPAWN_X,SPAWN_Y = math.floor(FIELD_SIZE_X/2),-1
 
+SCREEN_X,SCREEN_Y = love.window.getDesktopDimensions(1)
+
 function love.load(args)
-	DEBUG_DRAW = (args[1]~="amadiro")
+	DEBUG_DRAW = (args[2]~="amadiro")
 	require "binding"
 	require "helpfuncs"
 	require "class"
@@ -19,7 +21,6 @@ function love.load(args)
 	settings = love.filesystem.load("settings.lua")()
 
 	love.graphics.setBackgroundColor(100,100,100,255)
-	SCREEN_X,SCREEN_Y = love.window.getDesktopDimensions(1)
 	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=true})
 	
 	accumulator= 0

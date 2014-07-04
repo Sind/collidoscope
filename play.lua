@@ -1,3 +1,4 @@
+require "layout"
 play = {}
 field = {
 	{0,0,0,0,0,0,0,0,0,0},
@@ -24,10 +25,26 @@ field = {
 
 function play.load()
 	play.images = {}
-	if not DEBUG_DRAW then play.images.background = love.graphics.newImage("assets/board-design.png") end
 
 	player1 = player:new(1)
 	player2 = player:new(2)
+	-- play.load()
+	-- load initial assets, initialize schemes we're going to use.
+
+	play.scheme = {}
+	play._load_scheme('clairdelune')
+end
+function play._load_scheme(name)
+	-- play._load_scheme
+	-- internal function for loading a scheme.
+	-- schemes are mostly just colors, but can contain some extra
+	-- images for backgrounds etc.
+	
+	print("Loading scheme: '" .. name .. "'")
+	play.scheme[name] = {}
+	play.scheme[name].basepath = "assets/schemes/" .. name .. "/"
+	play.scheme[name].background = love.graphics.newImage(play.scheme[name].basepath .. "background.png")
+	play.scheme[name].colors = dofile(play.scheme[name].basepath .. "colors.lua")
 end
 
 function play.update(dt)
@@ -44,14 +61,33 @@ end
 
 
 function play.draw(debug_draw)
+	-- play.draw
+	-- invoked from main.lua to
+	-- perform all drawing of the gamestate.
+	
 	if debug_draw then
 		play._debug_draw()
 	else
-		play._do_draw()
+		play._do_draw('clairdelune')
 	end
 
 end
 
-function play._do_draw()
-	love.graphics.draw(play.images.background)
+
+function play._do_draw(scheme_name)
+	-- play._do_draw(scheme_name)
+	-- takes care of all the drawing for the gamefield
+	-- takes a scheme name, which will determine
+	-- what scheme/color palette is used to draw everything.
+	-- the schema has to have been previously initialized
+	-- using play._load_scheme().
+	
+	-- extract the scheme "folder" table
+	scheme = play.scheme[scheme_name]
+	
+	-- draw background
+	love.graphics.draw(scheme.background)
+
+	-- draw decorations
+	layout.rect(20, 20, 40, 40)
 end
