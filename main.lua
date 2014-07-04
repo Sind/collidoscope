@@ -1,7 +1,7 @@
 MAX_DT = 1/20
 PHYSICS_FPS = 1/60
 
-TILE_WIDTH = 8
+TILE_WIDTH = 7
 TILE_HEIGHT = TILE_WIDTH
 
 FIELD_SIZE_X,FIELD_SIZE_Y = 10,32
@@ -14,10 +14,11 @@ function love.load()
    require "menu"
    require "play"
    require "blocks"
+   Vec2 = require "vector"
    settings = love.filesystem.load("settings.lua")()
 
    scale = 4
-   love.graphics.setBackgroundColor(100,100,100,255)
+   love.graphics.setBackgroundColor(80,80,80,255)
 
    love.window.setMode(320*scale,240*scale,{ fsaa = 0, vsync = true })
    accumulator= 0
@@ -84,7 +85,20 @@ function love.keypressed(key, unicode)
    if key == "escape" then love.event.quit() end
 
    if key == "r" then 
-      rot = ((rot) % 4) + 1
+      curr_block.rot = ((curr_block.rot) % 4) + 1
+   end
+
+   if key == "right" then 
+      curr_block.location.x = curr_block.location.x + 1
+   end
+   if key == "left" then 
+      curr_block.location.x = curr_block.location.x - 1
+   end
+   if key == "up" then 
+      curr_block.location.y = curr_block.location.y - 1
+   end
+   if key == "down" then 
+      curr_block.location.y = curr_block.location.y + 1
    end
    
    -- keypressed[key] = true

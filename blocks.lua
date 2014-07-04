@@ -132,7 +132,8 @@ blocks = {
 }
 
 function block:init()
-   
+   self.location = Vec2(3,0)
+   self.rot = 1
 end
 
 function block:draw()
