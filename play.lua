@@ -36,7 +36,7 @@ function play.update(dt)
 
 end
 
-function play.draw()
+function play.draw(debug_draw)
 	for i = 1,#field do
 		for j = 1,#field[i] do
 			love.graphics.print(field[i][j],j*8,i*10)

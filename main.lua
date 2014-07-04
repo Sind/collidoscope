@@ -4,7 +4,8 @@ PHYSICS_FPS = 1/60
 TILE_WIDTH = 8
 TILE_HEIGHT = TILE_WIDTH
 
-FIELD_SIZE_X,FIELD_SIZE_Y = 10,20 
+FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
+DEBUG_DRAW = false
 
 function love.load()
 	require "binding"
@@ -55,7 +56,7 @@ end
 function love.draw()
 	if init or exit then return end
 	if game[mode].draw then
-		game[mode].draw()
+		game[mode].draw(DEBUG_DRAW)
 	end
 end
 
