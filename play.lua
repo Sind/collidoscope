@@ -50,5 +50,5 @@ function play.draw(debug_draw)
 end
 
 function play._do_draw()
-   love.graphics.draw(play.images.background)
+	love.graphics.draw(play.images.background)
 end
