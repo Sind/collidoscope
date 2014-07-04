@@ -1,5 +1,7 @@
 block = class()
 
+blocktypes = {'o','i', 'z', 's', 'j', 'l', 't'}
+
 blocks = { 
    o = {
       { 
@@ -134,8 +136,28 @@ blocks = {
 function block:init()
    self.location = Vec2(3,0)
    self.rot = 1
+   self.type = blocktypes[love.math.random(1, 7)]
 end
 
 function block:draw()
-   
+end
+
+function block:add_bits()
+   for i = 1,4 do
+      for j = 1,4 do
+	 if blocks[self.type][self.rot][i][j] == 1 then
+	    field[i + self.location.y][j + self.location.x] = 1
+	 end
+      end
+   end
+end
+
+function block:remove_bits()
+   for i = 1,4 do
+      for j = 1,4 do
+	 if blocks[self.type][self.rot][i][j] == 1 then
+	    field[i + self.location.y][j + self.location.x] = 0
+	 end
+      end
+   end
 end

@@ -82,13 +82,19 @@ end
 
 
 function love.keypressed(key, unicode)
+   curr_block:remove_bits()
+
    if key == "escape" then love.event.quit() end
 
-   if key == "r" then 
-      curr_block.rot = ((curr_block.rot) % 4) + 1
+   if key == "r" then
+      curr_block.rot = ((curr_block.rot) % #blocks[curr_block.type]) + 1
+   end
+   if key == " " then
+      curr_block.type = blocktypes[math.random(1,7)]
+      curr_block.rot = ((curr_block.rot) % #blocks[curr_block.type]) + 1
    end
 
-   if key == "right" then 
+   if key == "right" then
       curr_block.location.x = curr_block.location.x + 1
    end
    if key == "left" then 
@@ -100,7 +106,10 @@ function love.keypressed(key, unicode)
    if key == "down" then 
       curr_block.location.y = curr_block.location.y + 1
    end
-   
+
+   curr_block:add_bits()
+
+
    -- keypressed[key] = true
    -- if key == "p" then useShader = not useShader end
 end
