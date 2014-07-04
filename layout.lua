@@ -41,3 +41,15 @@ function layout.rect(virtual_x, virtual_y, virtual_width, virtual_height)
 	phys_width, phys_height = layout._virtual_to_physical_dimensions(virtual_width, virtual_height)
 	love.graphics.rectangle("fill", phys_x, phys_y, phys_width, phys_height)
 end
+
+function layout.draw_layer(layer)
+	-- layout.draw_layer(layer)
+	-- draws an entire layer of geometry at once.
+	-- a layer is a set of 4-ples that describe
+	-- rectangles x, y, width, height in virtual
+	-- coordinates.
+	
+	for k,v in ipairs(layer) do
+		layout.rect(v[1], v[2], v[3], v[4])
+	end
+end

@@ -91,11 +91,6 @@ function play._do_draw(scheme_name)
 	-- draw background
 	love.graphics.draw(scheme.background)
 
-	-- draw decorations
-	for k,v in ipairs(play.geometry.containers) do
-		layout.rect(v[1], v[2], v[3], v[4])
-	end
-	--layout.rect(0, 0, 2, 0.0208) -- middle bar
-	--layout.rect(-0.8531, 0, 0.0286, 0.52) -- left scorebar
-	--layout.rect(0.8531, 0, 0.0286, 0.52) -- right scorebar
+	-- draw containers
+	layout.draw_layer(play.geometry.containers)
 end
