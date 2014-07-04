@@ -23,18 +23,37 @@ end
 function block:update(dt)
 	self.mainTime = self.mainTime + dt
 	self.subTime = self.subTime + dt
-	if self.mainTime > MAIN_TIME then
-		self.mainTime = self.mainTime - MAIN_TIME
-		self.y = self.y + 1
+
+	if binding.pressed["p1r"] then
+		self.x = self.x+1
+		if self:collides() then
+			self.x = self.x-1
+		end
 	end
-	if binding.pressed["p1r"] then self.x = self.x+1 end
-	if binding.pressed["p1l"] then self.x = self.x-1 end
-	if binding.pressed["p1u"] then self.rotation = self.rotation%#block_layouts[self.type]+1 end
+	if binding.pressed["p1l"] then
+		self.x = self.x-1
+		if self:collides() then
+			self.x = self.x+1
+		end
+	end
+
+	if binding.pressed["p1u"] then
+		self.rotation = self.rotation%#block_layouts[self.type]+1
+	end
+
 	if binding.isDown["p1d"] and self.subTime > SUB_TIME then
 		while self.subTime > SUB_TIME do self.subTime = self.subTime - SUB_TIME end
 		self.y = self.y+1
 		self.mainTime = self.subTime
 	end
+	if self.mainTime > MAIN_TIME then
+		self.mainTime = self.mainTime - MAIN_TIME
+		self.y = self.y + 1
+	end
+end
+
+function block:collides()
+
 end
 
 function block:draw()
