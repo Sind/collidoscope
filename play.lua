@@ -31,7 +31,7 @@ function play._init_shaders()
 
         vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
         {
-	    vec2 st_coords = screen_coords / vec2(1920, 1080)*vec2(8, 4);
+	    vec2 st_coords = screen_coords / vec2(1920, 1080)*vec2(8*3, 4*3);
             return Texel(pattern, st_coords);
         }
 	]])
@@ -76,6 +76,8 @@ function play._load_scheme(name)
 	play.scheme[name].colors = dofile(play.scheme[name].basepath .. "colors.lua")
 	play.scheme[name].pattern_light = love.graphics.newImage(play.scheme[name].basepath .. "pattern-light.png")
 	play.scheme[name].pattern_light:setWrap('repeat', 'repeat')
+	play.scheme[name].pattern_dark = love.graphics.newImage(play.scheme[name].basepath .. "pattern-dark.png")
+	play.scheme[name].pattern_dark:setWrap('repeat', 'repeat')
 end
 function play.update(dt)
 	player1:update(dt)
@@ -165,7 +167,11 @@ function play._draw_second_board(board, scheme)
 				layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
 				love.graphics.setShader()
 			else
+				love.graphics.setShader(play._tile_shader)
+				play._tile_shader:send("pattern", scheme.pattern_dark)
 				layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
+				love.graphics.setShader()
+				--layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
 			end
 			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
 		end
@@ -191,7 +197,11 @@ function play._draw_first_board(board, scheme)
 				layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
 				love.graphics.setShader()
 			else
+				love.graphics.setShader(play._tile_shader)
+				play._tile_shader:send("pattern", scheme.pattern_dark)
 				layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
+				love.graphics.setShader()
+				--layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
 			end
 			--layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
 			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
