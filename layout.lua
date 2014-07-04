@@ -58,3 +58,23 @@ function layout.draw_layer(layer, scheme)
 	end
 	love.graphics.setColor(255, 255, 255, 255)
 end
+
+function layout.img(virtual_x, virtual_y, virtual_width, virtual_height, image)
+
+	local virtual_x = virtual_x - virtual_width
+	local virtual_y = virtual_y - virtual_height
+	
+	local phys_x, phys_y = layout._virtual_to_physical(virtual_x, virtual_y)
+	phys_width, phys_height = layout._virtual_to_physical_dimensions(virtual_width, virtual_height)
+	
+	q_tr = love.graphics.newQuad(phys_x, phys_y, phys_width, phys_height, 200, 200)
+	q_bl = love.graphics.newQuad(phys_x, phys_y, phys_width, phys_height, 200, 200)
+	
+	
+	if GRID_DEBUG_DRAW then
+		love.graphics.draw("line", phys_x, phys_y, phys_width, phys_height)
+	else
+		love.graphics.rectangle("fill", phys_x, phys_y, phys_width, phys_height)
+	end
+end
+

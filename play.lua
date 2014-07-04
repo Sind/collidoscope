@@ -25,6 +25,20 @@ field = {
 	{1,1,1,1,1,1,1,1,1,1}
 }
 
+function play._init_shaders()
+	tile_shader = love.graphics.newShader([[
+	extern Image pattern;
+
+        vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
+        {
+	    vec2 st_coords = screen_coords / vec2(1920, 1080)*vec2(8, 4);
+            return Texel(pattern, st_coords);
+        }
+	]])
+	dbg.debug("Tile shader output: '" .. tile_shader:getWarnings() .. "'")
+	play._tile_shader = tile_shader
+end
+
 function play.load()
 	play.images = {}
 	
@@ -39,7 +53,7 @@ function play.load()
 	play._load_layer('containers')
 	play._load_layer('bg_light')
 	play._load_layer('bg_dark')
-	
+	play._init_shaders()
 end
 function play._load_layer(name)
 
@@ -60,8 +74,9 @@ function play._load_scheme(name)
 	play.scheme[name].basepath = "assets/schemes/" .. name .. "/"
 	play.scheme[name].background = love.graphics.newImage(play.scheme[name].basepath .. "background.png")
 	play.scheme[name].colors = dofile(play.scheme[name].basepath .. "colors.lua")
+	play.scheme[name].pattern_light = love.graphics.newImage(play.scheme[name].basepath .. "pattern-light.png")
+	play.scheme[name].pattern_light:setWrap('repeat', 'repeat')
 end
-
 function play.update(dt)
 	player1:update(dt)
 	player2:update(dt)
@@ -104,7 +119,7 @@ function play._do_draw(scheme_name)
 	-- using play._load_scheme().
 	
 	-- extract the scheme "folder" table
-	scheme = play.scheme[scheme_name]
+	local scheme = play.scheme[scheme_name]
 	
 	-- draw background
 	love.graphics.draw(scheme.background)
@@ -113,8 +128,8 @@ function play._do_draw(scheme_name)
 	layout.draw_layer(play.geometry.containers, scheme)
 	layout.draw_layer(play.geometry.bg_light, scheme)
 	layout.draw_layer(play.geometry.bg_dark, scheme)
-	play._draw_first_board(field)
-	play._draw_second_board(field)
+	play._draw_first_board(field, scheme)
+	play._draw_second_board(field, scheme)
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
@@ -131,29 +146,34 @@ function play._do_draw(scheme_name)
 
 	--to access the block structure you use 'block_layouts[playerx.currentBlock.type][playerx.currentBlock.rotation]'
 	--block position is described as playerx.currentBlock.x and playerx.currentBlock.y
-	
-
 end
 
-function play._draw_second_board(board)
+
+function play._draw_second_board(board, scheme)
 	local size_x = 0.0256
 	local size_y = 0.02534
 
 	local offset_x = 0.05947 + size_x*(#board[1]*2 + 1)
 	local offset_y = -0.0532 + size_y*(#board + 3)
-	dbg.debug("board size: " .. #board)
 	
 	for i = #board,1,-1 do
 		for j = #board[i],1,-1 do
 			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
-			layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
+			if field[i][j] == 1 then
+				love.graphics.setShader(play._tile_shader)
+				play._tile_shader:send("pattern", scheme.pattern_light)
+				layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
+				love.graphics.setShader()
+			else
+				layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
+			end
 			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
 		end
 	end
 	love.graphics.setColor(255, 255, 255)
 end
 
-function play._draw_first_board(board)
+function play._draw_first_board(board, scheme)
 	-- play._draw_board(board)
 	-- draws the actual game board (not including moving pieces)
 	-- as passed into the board variable.
@@ -165,9 +185,18 @@ function play._draw_first_board(board)
 	for i = 1,#board do
 		for j = 1,#board[i] do
 			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
-			layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
+			if field[i][j] == 1 then
+				love.graphics.setShader(play._tile_shader)
+				play._tile_shader:send("pattern", scheme.pattern_light)
+				layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
+				love.graphics.setShader()
+			else
+				layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
+			end
+			--layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
 			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
 		end
 	end
+	
 	love.graphics.setColor(255, 255, 255)
 end
