@@ -5,7 +5,7 @@ TILE_WIDTH = 8
 TILE_HEIGHT = TILE_WIDTH
 
 FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
-SPAWN_X,SPAWN_Y = math.floor(FIELD_SIZE_X/2),-1
+SPAWN_X,SPAWN_Y = math.floor(FIELD_SIZE_X/2)-1,-2
 
 SCREEN_X,SCREEN_Y = love.window.getDesktopDimensions(1)
 
