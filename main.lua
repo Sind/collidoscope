@@ -7,7 +7,7 @@ TILE_HEIGHT = TILE_WIDTH
 FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
 
 function love.load(args)
-	DEBUG_DRAW = (args[1]~="amadiro")
+	DEBUG_DRAW = (args[2]~="amadiro")
 	require "binding"
 	require "helpfuncs"
 	require "class"
@@ -55,6 +55,7 @@ end
 
 function love.draw()
 	if init or exit then return end
+	print(DEBUG_DRAW)
 	if game[mode].draw then
 		game[mode].draw(DEBUG_DRAW)
 	end
