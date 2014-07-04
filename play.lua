@@ -48,7 +48,8 @@ function play._load_scheme(name)
 end
 
 function play.update(dt)
-
+	player1:update(dt)
+	player2:update(dt)
 end
 
 function play._debug_draw()
