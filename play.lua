@@ -33,6 +33,9 @@ function play.load()
 
 	play.scheme = {}
 	play._load_scheme('clairdelune')
+	play.geometry = {}
+	play.geometry.containers = dofile("assets/geometry/containers.lua")
+	
 end
 function play._load_scheme(name)
 	-- play._load_scheme
@@ -89,7 +92,10 @@ function play._do_draw(scheme_name)
 	love.graphics.draw(scheme.background)
 
 	-- draw decorations
-	layout.rect(0, 0, 2, 0.0208) -- middle bar
-	layout.rect(-0.8531, 0, 0.0286, 0.52) -- left scorebar
-	layout.rect(0.8531, 0, 0.0286, 0.52) -- right scorebar
+	for k,v in ipairs(play.geometry.containers) do
+		layout.rect(v[1], v[2], v[3], v[4])
+	end
+	--layout.rect(0, 0, 2, 0.0208) -- middle bar
+	--layout.rect(-0.8531, 0, 0.0286, 0.52) -- left scorebar
+	--layout.rect(0.8531, 0, 0.0286, 0.52) -- right scorebar
 end
