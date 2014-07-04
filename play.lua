@@ -43,6 +43,7 @@ function play.load()
 	bgm = love.audio.newSource("assets/audio/music/tetrismusic.ogg", "stream")
 	bgm:setLooping(true)
 	love.audio.play(bgm)
+	bgm:setVolume(0.2)
 	
 end
 function play._load_layer(name)
@@ -117,18 +118,39 @@ function play._do_draw(scheme_name)
 	layout.draw_layer(play.geometry.containers, scheme)
 	layout.draw_layer(play.geometry.bg_light, scheme)
 	layout.draw_layer(play.geometry.bg_dark, scheme)
-	--play._draw_board(field)
+	play._draw_board(field)
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
+end
+
+function play._draw_board_test(board)
+	local offset_x = 0.05947
+	local offset_y = -0.0532
+	local size_x = 0.0256
+	local size_y = 0.02534
+	
+	for i = #board,1,-1 do
+		for j = #board[i],1,-1 do
+			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
+			layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
+			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
+		end
+	end
+	love.graphics.setColor(255, 255, 255)
 end
 
 function play._draw_board(board)
 	-- play._draw_board(board)
 	-- draws the actual game board (not including moving pieces)
 	-- as passed into the board variable.
+	local offset_x = -0.5947
+	local offset_y = -0.532
+	local size_x = 0.0256
+	local size_y = 0.02534
+	
 	for i = 1,#board do
 		for j = 1,#board[i] do
 			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
-			layout.rectangle()
+			layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
 			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
 		end
 	end
