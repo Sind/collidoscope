@@ -1,1 +1,1 @@
-return {scale = 3}
+return {}
