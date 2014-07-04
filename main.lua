@@ -5,9 +5,9 @@ TILE_WIDTH = 8
 TILE_HEIGHT = TILE_WIDTH
 
 FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
-DEBUG_DRAW = false
 
-function love.load()
+function love.load(args)
+	DEBUG_DRAW = (args[1]~="amadiro")
 	require "binding"
 	require "helpfuncs"
 	require "class"

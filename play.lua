@@ -24,7 +24,7 @@ field = {
 
 function play.load()
 	play.images = {}
-	play.images.background = love.graphics.newImage("assets/board-design.png")
+	if not DEBUG_DRAW then play.images.background = love.graphics.newImage("assets/board-design.png") end
 end
 
 function play.update(dt)
