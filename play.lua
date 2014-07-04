@@ -33,6 +33,9 @@ function play.load()
 
 	play.scheme = {}
 	play._load_scheme('clairdelune')
+	play.geometry = {}
+	play.geometry.containers = dofile("assets/geometry/containers.lua")
+	
 end
 function play._load_scheme(name)
 	-- play._load_scheme
@@ -93,8 +96,6 @@ function play._do_draw(scheme_name)
 	-- draw background
 	love.graphics.draw(scheme.background)
 
-	-- draw decorations
-	layout.rect(50, 50, 100, 3.7)
-	layout.rect(4.48, 50, 2.86, 92.6)
-	layout.rect(100-4.48, 50, 2.86, 92.6)
+	-- draw containers
+	layout.draw_layer(play.geometry.containers)
 end
