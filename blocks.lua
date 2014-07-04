@@ -11,8 +11,9 @@ spawn={
 	      }
 }
 
-function block:init(t)
+function block:init(t,parent)
 	self.rotation = 1
+	self.parent = parent
 	self.x = SPAWN_X
 	self.y = SPAWN_Y
 	self.type = t
@@ -43,17 +44,37 @@ function block:update(dt)
 
 	if binding.isDown["p1d"] and self.subTime > SUB_TIME then
 		while self.subTime > SUB_TIME do self.subTime = self.subTime - SUB_TIME end
-		self.y = self.y+1
 		self.mainTime = self.subTime
+		self.y = self.y+1
+		if self:collides() then self.y = self.y-1;self:merge() end
 	end
 	if self.mainTime > MAIN_TIME then
 		self.mainTime = self.mainTime - MAIN_TIME
 		self.y = self.y + 1
+		if self:collides() then self.y = self.y-1;self:merge() end
 	end
 end
 
 function block:collides()
+	local cblock = block_layouts[self.type][self.rotation] 
+	for i,v in ipairs(cblock) do
+		for j,u in ipairs(v) do
+			if u == 1 and field[self.y+i-1] and field[self.y+i-1][self.x+j-1] and field[self.y+i-1][self.x+j-1] == 1 then return true end
+		end
+	end
+	return false
+end
 
+function block:merge()
+	local cblock = block_layouts[self.type][self.rotation]
+	for i,v in ipairs(cblock) do
+		for j,u in ipairs(v) do
+			if u == 1 then
+				field[self.y+i-1][self.x+j-1] = 1
+			end
+		end
+	end
+	self.parent.hasBlock = false
 end
 
 function block:draw()
