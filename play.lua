@@ -40,6 +40,10 @@ function play.load()
 	play._load_layer('bg_light')
 	play._load_layer('bg_dark')
 	
+	bgm = love.audio.newSource("assets/audio/music/tetrismusic.ogg", "stream")
+	bgm:setLooping(true)
+	love.audio.play(bgm)
+	
 end
 function play._load_layer(name)
 
