@@ -1,6 +1,7 @@
 player = class()
 
 function player:init(num)
+	self.playerNum = num
 	self.nextBlock = blockTypes[math.random(1,7)]
 	self.canHold = true
 end
