@@ -8,6 +8,8 @@ FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
 SPAWN_X,SPAWN_Y = math.floor(FIELD_SIZE_X/2)-1,-2
 
 SCREEN_X,SCREEN_Y = love.window.getDesktopDimensions(1)
+local xpercent,ypercent = SCREEN_X/16,SCREEN_Y/9
+PHYSICAL_X,PHYSICAL_Y = math.min(xpercent,ypercent)*16,math.min(xpercent,ypercent)*9
 
 function love.load(args)
 	DEBUG_DRAW = (args[2]~="amadiro")
