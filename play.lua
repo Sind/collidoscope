@@ -89,7 +89,7 @@ function play._do_draw(scheme_name)
 	love.graphics.draw(scheme.background)
 
 	-- draw decorations
-	layout.rect(50, 50, 100, 3.7)
-	layout.rect(4.48, 50, 2.86, 92.6)
-	layout.rect(100-4.48, 50, 2.86, 92.6)
+	layout.rect(0, 0, 2, 0.0208) -- middle bar
+	layout.rect(-0.8531, 0, 0.0286, 0.52) -- left scorebar
+	layout.rect(0.8531, 0, 0.0286, 0.52) -- right scorebar
 end
