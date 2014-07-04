@@ -2,16 +2,17 @@ player = class()
 
 function player:init(num)
 	self.playerNum = num
-	self.hasblock = false
+	self.hasBlock = false
 	self.nextBlock = blockTypes[math.random(1,7)]
 	self.canHold = true
 end
 
 function player:update(dt)
-	if not self.hasblock then
-		
+	if not self.hasBlock then
+		self:spawnBlock()
+		self.hasBlock = true
 	else
-		
+		self.currentBlock:update(dt)
 	end
 end
 
@@ -34,4 +35,10 @@ function player:holdBlock()
 		self.canHold = true
 	end
 	self.canHold = false
+end
+
+function player:draw()
+	if self.hasBlock then
+		self.currentBlock:draw()
+	end
 end

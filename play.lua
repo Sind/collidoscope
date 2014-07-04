@@ -25,9 +25,9 @@ field = {
 
 function play.load()
 	play.images = {}
-
+	
 	player1 = player:new(1)
-	player2 = player:new(2)
+	-- player2 = player:new(2)
 	-- play.load()
 	-- load initial assets, initialize schemes we're going to use.
 
@@ -49,15 +49,19 @@ end
 
 function play.update(dt)
 	player1:update(dt)
-	player2:update(dt)
+	-- player2:update(dt)
 end
 
 function play._debug_draw()
 	for i = 1,#field do
 		for j = 1,#field[i] do
-			love.graphics.print(field[i][j],j*8,i*10)
+			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
+			love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
 		end
 	end
+	love.graphics.setColor(255, 255, 255)
+	player1:draw()
+	-- player2:draw()
 end
 
 

@@ -5,11 +5,15 @@ TILE_HEIGHT = TILE_WIDTH
 FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
 SPAWN_X,SPAWN_Y = math.floor(FIELD_SIZE_X/2)-1,-2
 
+MAIN_TIME = 1
+SUB_TIME = 0.2
+
 SCREEN_X,SCREEN_Y = love.window.getDesktopDimensions(1)
 local xpercent,ypercent = SCREEN_X/16,SCREEN_Y/9
 VIRTUAL_X,VIRTUAL_Y = math.min(xpercent,ypercent)*16,math.min(xpercent,ypercent)*9
 
 function love.load(args)
+	math.randomseed(os.time())
 	DEBUG_DRAW = (args[2]~="amadiro")
 	require "binding"
 	require "helpfuncs"
