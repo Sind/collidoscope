@@ -39,7 +39,6 @@ function play._load_scheme(name)
 	play.scheme[name] = {}
 	play.scheme[name].basepath = "assets/schemes/" .. name .. "/"
 	play.scheme[name].background = love.graphics.newImage(play.scheme[name].basepath .. "background.png")
-
 end
 
 function play.update(dt)
