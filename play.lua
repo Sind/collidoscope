@@ -39,6 +39,10 @@ function play.load()
 	play._load_layer('containers')
 	--play._load_layer('backgrounds')
 	
+	bgm = love.audio.newSource("assets/audio/music/tetrismusic.ogg", "stream")
+	bgm:setLooping(true)
+	love.audio.play(bgm)
+	
 end
 function play._load_layer(name)
 	dbg.info("Loading layer: '" .. name .. "'")
