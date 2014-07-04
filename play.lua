@@ -1,14 +1,5 @@
 play = {}
-
-function play.load()
-	-- field = {}
-	-- for i = 1,FIELD_SIZE_Y do
-	-- 	field[i] = {}
-	-- 	for j = 1,FIELD_SIZE_X do
-	-- 		field[i][j] = 0
-	-- 	end
-	-- end
-	field = {
+field = {
 	{0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0},
@@ -29,18 +20,35 @@ function play.load()
 	{1,1,1,1,1,1,1,1,1,1},
 	{1,1,1,1,1,1,1,1,1,1},
 	{1,1,1,1,1,1,1,1,1,1}
-	}
+}
+
+function play.load()
+	play.images = {}
+	play.images.background = love.graphics.newImage("assets/board-design.png")
 end
 
 function play.update(dt)
 
 end
 
-function play.draw()
+function play._debug_draw()
 	for i = 1,#field do
 		for j = 1,#field[i] do
 			love.graphics.print(field[i][j],j*8,i*10)
 		end
 	end
+end
 
+
+function play.draw(debug_draw)
+	if debug_draw then
+		play._debug_draw()
+	else
+		play._do_draw()
+	end
+
+end
+
+function play._do_draw()
+	love.graphics.draw(play.images.background)
 end
