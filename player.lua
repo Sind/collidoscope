@@ -17,7 +17,7 @@ function player:update(dt)
 end
 
 function player:spawnBlock()
-	self.currentBlock = block:new(self.nextBlock)
+	self.currentBlock = block:new(self.nextBlock,self)
 	self.nextBlock = blockTypes[math.random(1,7)]
 	self.canHold = true
 end
