@@ -5,7 +5,7 @@ TILE_WIDTH = 8
 TILE_HEIGHT = TILE_WIDTH
 
 FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
-DEBUG_DRAW = false
+DEBUG_DRAW = true
 
 function love.load()
 	require "binding"
