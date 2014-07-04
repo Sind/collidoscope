@@ -24,6 +24,10 @@ field = {
 }
 
 function play.load()
+	play.images = {}
+
+	player1 = player:new(1)
+	player2 = player:new(2)
 	-- play.load()
 	-- load initial assets, initialize schemes we're going to use.
 
