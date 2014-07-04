@@ -1,4 +1,6 @@
 require "layout"
+require "dbg"
+
 play = {}
 field = {
 	{0,0,0,0,0,0,0,0,0,0},
@@ -34,16 +36,21 @@ function play.load()
 	play.scheme = {}
 	play._load_scheme('clairdelune')
 	play.geometry = {}
-	play.geometry.containers = dofile("assets/geometry/containers.lua")
+	play._load_layer('containers')
 	
 end
+function play._load_layer(name)
+	dbg.info("Loading layer: '" .. name .. "'")
+	play.geometry[name] = dofile("assets/geometry/" .. name .. ".lua")
+end
+
 function play._load_scheme(name)
 	-- play._load_scheme
 	-- internal function for loading a scheme.
 	-- schemes are mostly just colors, but can contain some extra
 	-- images for backgrounds etc.
 	
-	print("Loading scheme: '" .. name .. "'")
+	dbg.info("Loading scheme: '" .. name .. "'")
 	play.scheme[name] = {}
 	play.scheme[name].basepath = "assets/schemes/" .. name .. "/"
 	play.scheme[name].background = love.graphics.newImage(play.scheme[name].basepath .. "background.png")
@@ -93,4 +100,7 @@ function play._do_draw(scheme_name)
 
 	-- draw containers
 	layout.draw_layer(play.geometry.containers)
+
+	
+	--play.geometry.containers = dofile("assets/geometry/containers.lua");love.timer.sleep(0.5)
 end
