@@ -1,7 +1,7 @@
 layout = {}
 
-layout.end_x = love.graphics.getWidth()
-layout.end_y = love.graphics.getHeight()
+layout.end_x = SCREEN_X
+layout.end_y = SCREEN_Y
 
 layout.center_x = layout.end_x/2
 layout.center_y = layout.end_y/2

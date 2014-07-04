@@ -6,6 +6,8 @@ TILE_HEIGHT = TILE_WIDTH
 
 FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
 
+SCREEN_X,SCREEN_Y = love.window.getDesktopDimensions(1)
+
 function love.load(args)
 	DEBUG_DRAW = (args[2]~="amadiro")
 	require "binding"
@@ -17,7 +19,6 @@ function love.load(args)
 	settings = love.filesystem.load("settings.lua")()
 
 	love.graphics.setBackgroundColor(100,100,100,255)
-	SCREEN_X,SCREEN_Y = love.window.getDesktopDimensions(1)
 	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=true})
 	
 	accumulator= 0
@@ -55,7 +56,6 @@ end
 
 function love.draw()
 	if init or exit then return end
-	print(DEBUG_DRAW)
 	if game[mode].draw then
 		game[mode].draw(DEBUG_DRAW)
 	end
