@@ -21,7 +21,7 @@ function love.load()
    love.graphics.setBackgroundColor(80,80,80,255)
 
    love.window.setMode(320*scale,240*scale,{ fsaa = 0, vsync = true })
-   accumulator= 0
+   accumulator = 0
    -- keypressed = {}
    i = 0
    game = { play = play,menu = menu }
@@ -88,9 +88,9 @@ function love.keypressed(key, unicode)
 
    if key == "r" then
       curr_block.rot = ((curr_block.rot) % #blocks[curr_block.type]) + 1
---      if curr_block:collide_check() then
---	 curr_block.rot = ((curr_block.rot) % #blocks[curr_block.type]) - 1
---      end
+      if curr_block:collide_check() then
+	 curr_block.rot = ((curr_block.rot - 2) % #blocks[curr_block.type]) + 1
+      end
    end
    if key == " " then
       curr_block.type = blocktypes[math.random(1,7)]

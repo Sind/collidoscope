@@ -2,11 +2,18 @@ play = {}
 
 function play.load()
    field = {}
+
    for i = 1,FIELD_SIZE_Y+4 do
       field[i] = {}
       for j = 1,FIELD_SIZE_X+4 do
+	 field[i][j] = 0
+      end
+   end
+
+   for i = 1,FIELD_SIZE_Y+4 do
+      for j = 1,FIELD_SIZE_X+4 do
 	 --field[i][j] = love.math.random(0,1)
-	 if (i > FIELD_SIZE_Y/2) then
+	 if (i > (FIELD_SIZE_Y+4)/2) then
 	    field[i][j] = 1
 	 end
 	 
