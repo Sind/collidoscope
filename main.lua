@@ -14,7 +14,13 @@ VIRTUAL_X,VIRTUAL_Y = math.min(xpercent,ypercent)*16,math.min(xpercent,ypercent)
 
 function love.load(args)
 	math.randomseed(os.time())
-	DEBUG_DRAW = (args[2]~="amadiro")
+	DEBUG_DRAW = true
+	if #args > 1 then
+		for argNum = 2,#args do
+			arg = args[argNum]
+			if arg == "amadiro" then DEBUG_DRAW = false end
+		end
+	end
 	require "binding"
 	require "helpfuncs"
 	require "class"
