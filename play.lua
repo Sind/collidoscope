@@ -37,16 +37,16 @@ function play.load()
 	play._load_scheme('clairdelune')
 	play.geometry = {}
 	play._load_layer('containers')
-	--play._load_layer('backgrounds')
-	
-	-- bgm = love.audio.newSource("assets/audio/music/tetrismusic.ogg", "stream")
-	-- bgm:setLooping(true)
-	-- love.audio.play(bgm)
+	play._load_layer('bg_light')
+	play._load_layer('bg_dark')
 	
 end
 function play._load_layer(name)
-	dbg.info("Loading layer: '" .. name .. "'")
+
+	
 	play.geometry[name] = dofile("assets/geometry/" .. name .. ".lua")
+	local elements = #play.geometry[name].data
+	dbg.info("Loaded layer: '" .. name .. "' (" .. tostring(elements) .. " objects)")	
 end
 
 function play._load_scheme(name)
@@ -68,6 +68,7 @@ function play.update(dt)
 end
 
 function play._debug_draw()
+	-- TODO: delete this once the main draw code is good enough
 	for i = 1,#field do
 		for j = 1,#field[i] do
 			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
@@ -110,7 +111,46 @@ function play._do_draw(scheme_name)
 
 	-- draw containers
 	layout.draw_layer(play.geometry.containers, scheme)
+	layout.draw_layer(play.geometry.bg_light, scheme)
+	layout.draw_layer(play.geometry.bg_dark, scheme)
+	play._draw_first_board(field)
+	play._draw_second_board(field)
+	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
+end
 
+function play._draw_second_board(board)
+	local size_x = 0.0256
+	local size_y = 0.02534
+
+	local offset_x = 0.05947 + size_x*(#board[1]*2 + 1)
+	local offset_y = -0.0532 + size_y*(#board + 3)
+	dbg.debug("board size: " .. #board)
 	
-	-- play.geometry.containers = dofile("assets/geometry/containers.lua");love.timer.sleep(0.5)
+	for i = #board,1,-1 do
+		for j = #board[i],1,-1 do
+			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
+			layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
+			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
+		end
+	end
+	love.graphics.setColor(255, 255, 255)
+end
+
+function play._draw_first_board(board)
+	-- play._draw_board(board)
+	-- draws the actual game board (not including moving pieces)
+	-- as passed into the board variable.
+	local offset_x = -0.5947
+	local offset_y = -0.532
+	local size_x = 0.0256
+	local size_y = 0.02534
+	
+	for i = 1,#board do
+		for j = 1,#board[i] do
+			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
+			layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
+			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
+		end
+	end
+	love.graphics.setColor(255, 255, 255)
 end

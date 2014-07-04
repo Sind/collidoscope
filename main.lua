@@ -19,6 +19,7 @@ function love.load(args)
 		for argNum = 2,#args do
 			arg = args[argNum]
 			if arg == "amadiro" then DEBUG_DRAW = false end
+			if arg == "grid" then GRID_DEBUG_DRAW = true end
 		end
 	end
 	require "binding"
