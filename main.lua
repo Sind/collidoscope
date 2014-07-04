@@ -32,7 +32,7 @@ function love.load(args)
 	settings = love.filesystem.load("settings.lua")()
 
 	love.graphics.setBackgroundColor(100,100,100,255)
-	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=true})
+	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=false})
 	
 	game = {play = play,menu = menu}
 	mode = "play"
