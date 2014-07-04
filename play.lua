@@ -1,3 +1,4 @@
+require "layout"
 play = {}
 field = {
 	{0,0,0,0,0,0,0,0,0,0},
@@ -39,6 +40,7 @@ function play._load_scheme(name)
 	play.scheme[name] = {}
 	play.scheme[name].basepath = "assets/schemes/" .. name .. "/"
 	play.scheme[name].background = love.graphics.newImage(play.scheme[name].basepath .. "background.png")
+	play.scheme[name].colors = dofile(play.scheme[name].basepath .. "colors.lua")
 end
 
 function play.update(dt)
@@ -55,6 +57,10 @@ end
 
 
 function play.draw(debug_draw)
+	-- play.draw
+	-- invoked from main.lua to
+	-- perform all drawing of the gamestate.
+	
 	if debug_draw then
 		play._debug_draw()
 	else
@@ -63,11 +69,22 @@ function play.draw(debug_draw)
 
 end
 
+
 function play._do_draw(scheme_name)
+	-- play._do_draw(scheme_name)
+	-- takes care of all the drawing for the gamefield
+	-- takes a scheme name, which will determine
+	-- what scheme/color palette is used to draw everything.
+	-- the schema has to have been previously initialized
+	-- using play._load_scheme().
+	
 	-- extract the scheme "folder" table
 	scheme = play.scheme[scheme_name]
 	
 	-- draw background
 	love.graphics.draw(scheme.background)
+
 	-- draw decorations
+	print(
+	--love.graphics.rectangle("fill", layout.center_x, layout.center_y, layout.percent_x(50), layout.percent_y(50))
 end
