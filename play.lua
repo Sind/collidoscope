@@ -118,6 +118,23 @@ function play._do_draw(scheme_name)
 	play._draw_first_board(field)
 	play._draw_second_board(field)
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
+
+
+	-- player 1 is on the left
+	--player1.currentBlock has info for current block(type, position,rotation)
+	--same for player2
+	--player1.nextBlock had info for next block(type only)
+	--same for player2
+	--player1.holdBlock has info for held block(type only)
+	--same for player2
+	
+	--types are as follows:{[1]="iblock",[2]="lblock",[3]="jblock",[4]="tblock",[5]="oblock",[6]="zblock",[7]="sblock"}
+	--this shouldn't matter to you at all, but oh well
+
+	--to access the block structure you use 'block_layouts[playerx.currentBlock.type][playerx.currentBlock.rotation]'
+	--block position is described as playerx.currentBlock.x and playerx.currentBlock.y
+	
+
 end
 
 function play._draw_second_board(board)
