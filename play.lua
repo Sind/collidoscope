@@ -25,6 +25,9 @@ field = {
 function play.load()
 	play.images = {}
 	if not DEBUG_DRAW then play.images.background = love.graphics.newImage("assets/board-design.png") end
+
+	player1 = player:new(1)
+	player2 = player:new(2)
 end
 
 function play.update(dt)

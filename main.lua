@@ -5,6 +5,7 @@ TILE_WIDTH = 8
 TILE_HEIGHT = TILE_WIDTH
 
 FIELD_SIZE_X,FIELD_SIZE_Y = 10,20
+SPAWN_X,SPAWN_Y = math.floor(FIELD_SIZE_X/2),-1
 
 function love.load(args)
 	DEBUG_DRAW = (args[1]~="amadiro")
@@ -12,6 +13,7 @@ function love.load(args)
 	require "helpfuncs"
 	require "class"
 	require "blocks"
+	require "player"
 	require "menu"
 	require "play"
 	settings = love.filesystem.load("settings.lua")()
