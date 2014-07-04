@@ -113,15 +113,18 @@ function play._do_draw(scheme_name)
 	layout.draw_layer(play.geometry.containers, scheme)
 	layout.draw_layer(play.geometry.bg_light, scheme)
 	layout.draw_layer(play.geometry.bg_dark, scheme)
-	play._draw_board(field)
+	play._draw_first_board(field)
+	play._draw_second_board(field)
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 end
 
-function play._draw_board_test(board)
-	local offset_x = 0.05947
-	local offset_y = -0.0532
+function play._draw_second_board(board)
 	local size_x = 0.0256
 	local size_y = 0.02534
+
+	local offset_x = 0.05947 + size_x*(#board[1]*2 + 1)
+	local offset_y = -0.0532 + size_y*(#board + 3)
+	dbg.debug("board size: " .. #board)
 	
 	for i = #board,1,-1 do
 		for j = #board[i],1,-1 do
@@ -133,7 +136,7 @@ function play._draw_board_test(board)
 	love.graphics.setColor(255, 255, 255)
 end
 
-function play._draw_board(board)
+function play._draw_first_board(board)
 	-- play._draw_board(board)
 	-- draws the actual game board (not including moving pieces)
 	-- as passed into the board variable.
