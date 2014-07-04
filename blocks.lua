@@ -134,7 +134,7 @@ blocks = {
 }
 
 function block:init()
-   self.location = Vec2(3,0)
+   self.location = Vec2(3,2)
    self.rot = 1
    self.type = blocktypes[love.math.random(1, 7)]
 end
@@ -160,4 +160,21 @@ function block:remove_bits()
 	 end
       end
    end
+end
+
+-- true if collide, false if not!
+-- between curr_block and field
+function block:collide_check()
+   local colliding = false
+
+   for i = 1,4 do
+      for j = 1,4 do
+	 if blocks[self.type][self.rot][i][j] == 1 and 
+	 field[i + self.location.y][j + self.location.x] == 1 then
+	    colliding = true
+	 end
+      end
+   end
+   
+   return colliding
 end

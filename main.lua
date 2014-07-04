@@ -88,6 +88,9 @@ function love.keypressed(key, unicode)
 
    if key == "r" then
       curr_block.rot = ((curr_block.rot) % #blocks[curr_block.type]) + 1
+--      if curr_block:collide_check() then
+--	 curr_block.rot = ((curr_block.rot) % #blocks[curr_block.type]) - 1
+--      end
    end
    if key == " " then
       curr_block.type = blocktypes[math.random(1,7)]
@@ -96,19 +99,30 @@ function love.keypressed(key, unicode)
 
    if key == "right" then
       curr_block.location.x = curr_block.location.x + 1
+      if curr_block:collide_check() then
+	 curr_block.location.x = curr_block.location.x - 1
+      end
    end
    if key == "left" then 
       curr_block.location.x = curr_block.location.x - 1
+      if curr_block:collide_check() then
+	 curr_block.location.x = curr_block.location.x + 1
+      end
    end
    if key == "up" then 
       curr_block.location.y = curr_block.location.y - 1
+      if curr_block:collide_check() then
+	 curr_block.location.y = curr_block.location.y + 1
+      end
    end
    if key == "down" then 
       curr_block.location.y = curr_block.location.y + 1
+      if curr_block:collide_check() then
+	 curr_block.location.y = curr_block.location.y - 1
+      end
    end
-
+   
    curr_block:add_bits()
-
 
    -- keypressed[key] = true
    -- if key == "p" then useShader = not useShader end
