@@ -12,6 +12,7 @@ function player:update(dt)
 		self:spawnBlock()
 		self.hasBlock = true
 	else
+		if binding.pressed["p"..self.playerNum.."h"] then self:shiftBlock() end
 		self.currentBlock:update(dt)
 	end
 end
@@ -22,17 +23,16 @@ function player:spawnBlock()
 	self.canHold = true
 end
 
-function player:holdBlock()
+function player:shiftBlock()
 	if self.canHold == false then return end
 	if self.holdBlock then
 		local tempBlock = self.holdBlock
 		self.holdBlock = self.currentBlock.type
-		self.currentBlock = block:new(tempBlock)
+		self.currentBlock = block:new(tempBlock,self)
 	else
 		self.holdBlock = self.currentBlock.type
-		self.currentBlock = block:new(self.nextBlock)
+		self.currentBlock = block:new(self.nextBlock,self)
 		self.nextBlock = blockTypes[math.random(1,7)]
-		self.canHold = true
 	end
 	self.canHold = false
 end

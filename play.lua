@@ -11,9 +11,9 @@ field = {
 	{0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,1,0},
-	{0,0,0,1,0,0,1,1,0,0},
+	{0,0,0,0,0,0,1,0,0,0},
+	{0,0,0,0,0,0,0,1,1,0},
+	{0,0,0,1,1,0,1,1,0,0},
 	{0,1,1,1,0,1,1,0,0,1},
 	{0,1,1,1,0,0,1,0,0,1},
 	{1,1,1,1,1,1,1,1,1,1},
@@ -29,7 +29,7 @@ function play.load()
 	play.images = {}
 	
 	player1 = player:new(1)
-	-- player2 = player:new(2)
+	player2 = player:new(2)
 	-- play.load()
 	-- load initial assets, initialize schemes we're going to use.
 
@@ -64,7 +64,7 @@ end
 
 function play.update(dt)
 	player1:update(dt)
-	-- player2:update(dt)
+	player2:update(dt)
 end
 
 function play._debug_draw()
@@ -76,7 +76,7 @@ function play._debug_draw()
 	end
 	love.graphics.setColor(255, 255, 255)
 	player1:draw()
-	-- player2:draw()
+	player2:draw()
 end
 
 

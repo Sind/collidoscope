@@ -25,24 +25,25 @@ function block:update(dt)
 	self.mainTime = self.mainTime + dt
 	self.subTime = self.subTime + dt
 
-	if binding.pressed["p1r"] then
+	if binding.pressed["p"..self.parent.playerNum.."r"] then
 		self.x = self.x+1
 		if self:collides() then
 			self.x = self.x-1
 		end
 	end
-	if binding.pressed["p1l"] then
+	if binding.pressed["p"..self.parent.playerNum.."l"] then
 		self.x = self.x-1
 		if self:collides() then
 			self.x = self.x+1
 		end
 	end
 
-	if binding.pressed["p1u"] then
+	if binding.pressed["p"..self.parent.playerNum.."u"] then
 		self.rotation = self.rotation%#block_layouts[self.type]+1
+		if self:collides() then self.rotation = (self.rotation-2)%#block_layouts[self.type] + 1 end
 	end
 
-	if binding.isDown["p1d"] and self.subTime > SUB_TIME then
+	if binding.isDown["p"..self.parent.playerNum.."d"] and self.subTime > SUB_TIME then
 		while self.subTime > SUB_TIME do self.subTime = self.subTime - SUB_TIME end
 		self.mainTime = self.subTime
 		self.y = self.y+1
@@ -78,14 +79,21 @@ function block:merge()
 end
 
 function block:draw()
-	local cblock = block_layouts[self.type][self.rotation] 
+	local c = (2-self.parent.playerNum) * 255
+	love.graphics.setColor(c,c,c)
+	local cblock = block_layouts[self.type][self.rotation]
 	for i,v in ipairs(cblock) do
 		for j,u in ipairs(v) do
 			if u == 1 then
-				love.graphics.rectangle("fill", (self.x+j-1)*50, (self.y+i-1)*50, 50, 50)
+				if self.parent.playerNum == 1 then
+					love.graphics.rectangle("fill", (self.x+j-1)*50, (self.y+i-1)*50, 50, 50)
+				else
+					love.graphics.rectangle("fill", (FIELD_SIZE_X-self.x-j+2)*50, (FIELD_SIZE_Y-self.y-i+2)*50, 50, 50)
+				end
 			end
 		end
 	end
+	love.graphics.setColor(255,255,255)
 end
 
 block_layouts ={
