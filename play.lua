@@ -11,11 +11,11 @@ field = {
 	{0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,1,0,0,0},
-	{0,0,0,0,0,0,0,1,1,0},
-	{0,0,0,1,1,0,1,1,0,0},
-	{0,1,1,1,0,1,1,0,0,1},
-	{0,1,1,1,0,0,1,0,0,1},
+	{0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0},
+	{1,1,1,1,1,1,1,1,1,1},
+	{1,1,1,1,1,1,1,1,1,1},
+	{1,1,1,1,1,1,1,1,1,1},
 	{1,1,1,1,1,1,1,1,1,1},
 	{1,1,1,1,1,1,1,1,1,1},
 	{1,1,1,1,1,1,1,1,1,1},
@@ -39,6 +39,10 @@ function play.load()
 	play._load_layer('containers')
 	play._load_layer('bg_light')
 	play._load_layer('bg_dark')
+
+	if DEBUG_DRAW then
+		mcan = love.graphics.newCanvas(1920/2, 1080)
+	end
 	
 end
 function play._load_layer(name)
@@ -69,6 +73,8 @@ end
 
 function play._debug_draw()
 	-- TODO: delete this once the main draw code is good enough
+	mcan:clear()
+	love.graphics.setCanvas(mcan)
 	for i = 1,#field do
 		for j = 1,#field[i] do
 			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
@@ -78,6 +84,9 @@ function play._debug_draw()
 	love.graphics.setColor(255, 255, 255)
 	player1:draw()
 	player2:draw()
+	love.graphics.setCanvas()
+	love.graphics.draw(mcan)
+	love.graphics.draw(mcan, 1920, 1080, math.pi)
 end
 
 

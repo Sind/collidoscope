@@ -66,8 +66,8 @@ function block:collides()
 						if not field[self.y+i-1][self.x+j-1] or field[self.y+i-1][self.x+j-1] == 1 then return true end
 					end
 				else
-					if field[FIELD_SIZE_X-self.x-j+2] then
-						if not field[FIELD_SIZE_X-self.x-j+2][FIELD_SIZE_Y-self.y-i+2] or field[FIELD_SIZE_X-self.x-j+2][FIELD_SIZE_Y-self.y-i+2] == 0 then return true end
+					if field[FIELD_SIZE_Y-self.y-i+2] then
+						if not field[FIELD_SIZE_Y-self.y-i+2][FIELD_SIZE_X-self.x-j+2] or field[FIELD_SIZE_Y-self.y-i+2][FIELD_SIZE_X-self.x-j+2] == 0 then return true end
 					end
 				end
 			end
@@ -85,7 +85,7 @@ function block:merge()
 				if self.parent.playerNum == 1 then
 					field[self.y+i-1][self.x+j-1] = 1
 				else
-					field[FIELD_SIZE_X-self.x-j+2][FIELD_SIZE_Y-self.y-i+2] = 0
+					field[FIELD_SIZE_Y-self.y-i+2][FIELD_SIZE_X-self.x-j+2] = 0
 				end
 			end
 		end
