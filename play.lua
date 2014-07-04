@@ -107,5 +107,5 @@ function play._do_draw(scheme_name)
 	layout.draw_layer(play.geometry.containers)
 
 	
-	--play.geometry.containers = dofile("assets/geometry/containers.lua");love.timer.sleep(0.5)
+	play.geometry.containers = dofile("assets/geometry/containers.lua");love.timer.sleep(0.5)
 end
