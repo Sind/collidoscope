@@ -39,7 +39,11 @@ function layout.rect(virtual_x, virtual_y, virtual_width, virtual_height)
 	
 	local phys_x, phys_y = layout._virtual_to_physical(virtual_x, virtual_y)
 	phys_width, phys_height = layout._virtual_to_physical_dimensions(virtual_width, virtual_height)
-	love.graphics.rectangle("fill", phys_x, phys_y, phys_width, phys_height)
+	if GRID_DEBUG_DRAW then
+		love.graphics.rectangle("line", phys_x, phys_y, phys_width, phys_height)
+	else
+		love.graphics.rectangle("fill", phys_x, phys_y, phys_width, phys_height)
+	end
 end
 
 function layout.draw_layer(layer, scheme)
@@ -52,4 +56,5 @@ function layout.draw_layer(layer, scheme)
 	for k,v in ipairs(layer.data) do
 		layout.rect(v[1], v[2], v[3], v[4])
 	end
+	love.graphics.setColor(255, 255, 255, 255)
 end
