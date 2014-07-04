@@ -60,7 +60,18 @@ function block:collides()
 	local cblock = block_layouts[self.type][self.rotation] 
 	for i,v in ipairs(cblock) do
 		for j,u in ipairs(v) do
-			if u == 1 and field[self.y+i-1] and field[self.y+i-1][self.x+j-1] and field[self.y+i-1][self.x+j-1] == 1 then return true end
+			if u == 1 then
+				if self.parent.playerNum == 1 then
+					if field[self.y+i-1] then
+						if not field[self.y+i-1][self.x+j-1] or field[self.y+i-1][self.x+j-1] == 1 then return true end
+					end
+				else
+					if field[FIELD_SIZE_X-self.x-j+2] then
+						if not field[FIELD_SIZE_X-self.x-j+2][FIELD_SIZE_Y-self.y-i+2] or field[FIELD_SIZE_X-self.x-j+2][FIELD_SIZE_Y-self.y-i+2] == 0 then return true end
+					end
+				end
+			end
+			-- if u == 1 and field[self.y+i-1] and field[self.y+i-1][self.x+j-1] and field[self.y+i-1][self.x+j-1] == 1 then return true end
 		end
 	end
 	return false
@@ -71,7 +82,11 @@ function block:merge()
 	for i,v in ipairs(cblock) do
 		for j,u in ipairs(v) do
 			if u == 1 then
-				field[self.y+i-1][self.x+j-1] = 1
+				if self.parent.playerNum == 1 then
+					field[self.y+i-1][self.x+j-1] = 1
+				else
+					field[FIELD_SIZE_X-self.x-j+2][FIELD_SIZE_Y-self.y-i+2] = 0
+				end
 			end
 		end
 	end
