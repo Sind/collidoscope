@@ -120,7 +120,24 @@ function play.draw(debug_draw)
 
 end
 
+function play._draw_block(blocktype, x, y, rotation)
+	local size_x = 0.0256
+	local size_y = 0.02534
 
+	local offset_x = -0.5947 + x*size_x*2
+	local offset_y = -0.532 + y*size_y*2
+	
+	local cblock = block_layouts[blocktype][rotation]
+	for i,v in ipairs(cblock) do
+                for j,u in ipairs(v) do
+			if u == 1 then
+				love.graphics.setColor(255, 0, 0)
+				layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
+				love.graphics.setColor(255, 255, 255)
+			end
+		end
+	end
+end
 function play._do_draw(scheme_name)
 	-- play._do_draw(scheme_name)
 	-- takes care of all the drawing for the gamefield
@@ -144,9 +161,10 @@ function play._do_draw(scheme_name)
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
+	play._draw_block(player1.currentBlock.type, player1.currentBlock.x, player1.currentBlock.y, player1.currentBlock.rotation)
+	--play._draw_block(player2.currentBlock.type, player1.currentBlock.position, player1.currentBlock.rotation)
 	-- player 1 is on the left
 	--player1.currentBlock has info for current block(type, position,rotation)
-	dbg.debug(player1.currentBlock.type)
 	--same for player2
 	--player1.nextBlock had info for next block(type only)
 	--same for player2
