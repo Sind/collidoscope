@@ -48,7 +48,7 @@ function play.load()
 	-- load initial assets, initialize schemes we're going to use.
 
 	play.scheme = {}
-	play._load_scheme('clairdelune')
+	play._load_scheme('testkek')
 	play.geometry = {}
 	play._load_layer('containers')
 	play._load_layer('bg_light')
@@ -115,7 +115,7 @@ function play.draw(debug_draw)
 	if debug_draw then
 		play._debug_draw()
 	else
-		play._do_draw('clairdelune')
+		play._do_draw('testkek')
 	end
 
 end
