@@ -51,7 +51,7 @@ function play.load()
 	-- load initial assets, initialize schemes we're going to use.
 
 	play.scheme = {}
-	play._load_scheme('testkek')
+	play._load_scheme('clairdelune')
 	play.geometry = {}
 	play._load_layer('containers')
 	play._load_layer('bg_light')
@@ -93,7 +93,7 @@ end
 
 function play._debug_draw()
 	-- TODO: delete this once the main draw code is good enough
-	mcan:clear()
+   mcan:clear()
 	love.graphics.setCanvas(mcan)
 	for i = 1,#field do
 		for j = 1,#field[i] do
@@ -118,7 +118,7 @@ function play.draw(debug_draw)
 	if debug_draw then
 		play._debug_draw()
 	else
-		play._do_draw('testkek')
+		play._do_draw('clairdelune')
 	end
 
 end
