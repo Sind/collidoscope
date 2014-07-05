@@ -146,6 +146,7 @@ function play._do_draw(scheme_name)
 
 	-- player 1 is on the left
 	--player1.currentBlock has info for current block(type, position,rotation)
+	dbg.debug(player1.currentBlock.type)
 	--same for player2
 	--player1.nextBlock had info for next block(type only)
 	--same for player2
