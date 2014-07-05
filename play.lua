@@ -31,11 +31,14 @@ function play._init_shaders()
 
         vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
         {
-	    vec2 st_coords = screen_coords / vec2(1920, 1080)*vec2(8*3, 4*3);
-            return Texel(pattern, st_coords);
+		vec2 st_coords = screen_coords / vec2(1920, 1080)*vec2(8*3, 4*3);
+        	return Texel(pattern, st_coords);
         }
 	]])
-	dbg.debug("Tile shader output: '" .. tile_shader:getWarnings() .. "'")
+	local warnings = tile_shader:getWarnings()
+	if warnings ~= "" and warnings ~= "\n" and warnings ~= "pixel shader:\n"then
+		dbg.debug("Tile shader output: '" .. tile_shader:getWarnings() .. "'")
+	end
 	play._tile_shader = tile_shader
 end
 
@@ -143,8 +146,8 @@ function play._draw_second_block(blocktype, x, y, rotation, scheme, field_width,
 	local size_x = 0.0256
 	local size_y = 0.02534
 
-	local offset_x = 0.05947 + size_x*(field_width*2 + 1) + x*size_x*2
-	local offset_y = -0.0532 + size_y*(field_height + 3) + y*size_y*2
+	local offset_x = 0.05947 + size_x*(field_width*2 + 1) + (x - field_width - 1)*size_x*2
+	local offset_y = -0.0532 + size_y*(field_height + 3) + (y - field_height - 1)*size_y*2
 	
 	local cblock = block_layouts[blocktype][rotation]
 	for i,v in ipairs(cblock) do
@@ -152,7 +155,7 @@ function play._draw_second_block(blocktype, x, y, rotation, scheme, field_width,
 			if u == 1 then
 				love.graphics.setShader(play._tile_shader)
 				play._tile_shader:send("pattern", scheme.pattern_dark)
-				layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
+				layout.rect(offset_x + ((j-1))*size_x*2, offset_y + ((i-1))*size_y*2, size_x, size_y)
 				love.graphics.setShader()
 			end
 		end
