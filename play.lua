@@ -31,11 +31,14 @@ function play._init_shaders()
 
         vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
         {
-	    vec2 st_coords = screen_coords / vec2(1920, 1080)*vec2(8*3, 4*3);
-            return Texel(pattern, st_coords);
+		vec2 st_coords = screen_coords / vec2(1920, 1080)*vec2(8*3, 4*3);
+        	return Texel(pattern, st_coords);
         }
 	]])
-	dbg.debug("Tile shader output: '" .. tile_shader:getWarnings() .. "'")
+	local warnings = tile_shader:getWarnings()
+	if warnings ~= "" and warnings ~= "\n" and warnings ~= "pixel shader:\n"then
+		dbg.debug("Tile shader output: '" .. tile_shader:getWarnings() .. "'")
+	end
 	play._tile_shader = tile_shader
 end
 
@@ -120,7 +123,7 @@ function play.draw(debug_draw)
 
 end
 
-function play._draw_block(blocktype, x, y, rotation)
+function play._draw_first_block(blocktype, x, y, rotation, scheme)
 	local size_x = 0.0256
 	local size_y = 0.02534
 
@@ -131,13 +134,34 @@ function play._draw_block(blocktype, x, y, rotation)
 	for i,v in ipairs(cblock) do
                 for j,u in ipairs(v) do
 			if u == 1 then
-				love.graphics.setColor(255, 0, 0)
+				love.graphics.setShader(play._tile_shader)
+				play._tile_shader:send("pattern", scheme.pattern_light)
 				layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
-				love.graphics.setColor(255, 255, 255)
+				love.graphics.setShader()
 			end
 		end
 	end
 end
+function play._draw_second_block(blocktype, x, y, rotation, scheme, field_width, field_height)
+	local size_x = 0.0256
+	local size_y = 0.02534
+
+	local offset_x = 0.05947 + size_x*(field_width*2 + 1) + (x - field_width - 1)*size_x*2
+	local offset_y = -0.0532 + size_y*(field_height + 3) + (y - field_height - 1)*size_y*2
+	
+	local cblock = block_layouts[blocktype][rotation]
+	for i,v in ipairs(cblock) do
+                for j,u in ipairs(v) do
+			if u == 1 then
+				love.graphics.setShader(play._tile_shader)
+				play._tile_shader:send("pattern", scheme.pattern_dark)
+				layout.rect(offset_x + ((j-1))*size_x*2, offset_y + ((i-1))*size_y*2, size_x, size_y)
+				love.graphics.setShader()
+			end
+		end
+	end
+end
+
 function play._do_draw(scheme_name)
 	-- play._do_draw(scheme_name)
 	-- takes care of all the drawing for the gamefield
@@ -161,7 +185,8 @@ function play._do_draw(scheme_name)
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
-	play._draw_block(player1.currentBlock.type, player1.currentBlock.x, player1.currentBlock.y, player1.currentBlock.rotation)
+	play._draw_first_block(player1.currentBlock.type, player1.currentBlock.x, player1.currentBlock.y, player1.currentBlock.rotation, scheme)
+	play._draw_second_block(player2.currentBlock.type, player2.currentBlock.x, player2.currentBlock.y, player2.currentBlock.rotation, scheme, #field[1], #field)
 	--play._draw_block(player2.currentBlock.type, player1.currentBlock.position, player1.currentBlock.rotation)
 	-- player 1 is on the left
 	--player1.currentBlock has info for current block(type, position,rotation)
