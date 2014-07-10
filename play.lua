@@ -64,7 +64,9 @@ function play.load()
 
 	-- particle system stuff
 	require "particlesystem1"
+	require "particlesystem2"
 	system:start()
+	system2:start()
 end
 function play._load_layer(name)
 
@@ -103,8 +105,10 @@ function play.update(dt)
 	
 	--layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
 	system:setPosition( player1.currentBlock.x*50 + 450, player1.currentBlock.y*50 + 80 )
+	system2:setPosition( player1.currentBlock.x*50 + 450, player1.currentBlock.y*50 + 80 )
 	--system:setPosition(offset_x + (2)*size_x*2 , offset_y + (2)*size_y*2 )
 	system:update(dt) 
+	system2:update(dt) 
 end
 
 function play._debug_draw()
@@ -202,6 +206,7 @@ function play._do_draw(scheme_name)
 
 	-- particle system for player 1
 	love.graphics.draw(system)
+	love.graphics.draw(system2)
 	
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
