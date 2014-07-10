@@ -123,7 +123,7 @@ function play.draw(debug_draw)
 
 end
 
-function play._draw_first_block(blocktype, x, y, rotation, scheme)
+function play._draw_first_block(blocktype, x, y, rotation, scheme, field_width, field_height)
 	local size_x = 0.0256
 	local size_y = 0.02534
 
@@ -131,6 +131,22 @@ function play._draw_first_block(blocktype, x, y, rotation, scheme)
 	local offset_y = -0.532 + y*size_y*2
 	
 	local cblock = block_layouts[blocktype][rotation]
+	for i,v in ipairs(cblock) do
+                for j,u in ipairs(v) do
+			if u == 1 then
+				love.graphics.setShader(play._tile_shader)
+				play._tile_shader:send("pattern", scheme.pattern_light)
+				layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
+				love.graphics.setShader()
+			end
+		end
+	end
+	local size_x = 0.0256
+	local size_y = 0.02534
+
+	local offset_x = 0.05947 + (size_x*(field_width*2 + 1) + (x - field_width - 1)*size_x*2)
+	--local offset_y = -0.0532 + size_y*(field_height + 3) + (y - field_height - 1)*size_y*2
+	local offset_y = -0.532 + field_width*size_y*4 - y*size_y*2
 	for i,v in ipairs(cblock) do
                 for j,u in ipairs(v) do
 			if u == 1 then
@@ -185,7 +201,7 @@ function play._do_draw(scheme_name)
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
-	play._draw_first_block(player1.currentBlock.type, player1.currentBlock.x, player1.currentBlock.y, player1.currentBlock.rotation, scheme)
+	play._draw_first_block(player1.currentBlock.type, player1.currentBlock.x, player1.currentBlock.y, player1.currentBlock.rotation, scheme, #field[1], #field)
 	play._draw_second_block(player2.currentBlock.type, player2.currentBlock.x, player2.currentBlock.y, player2.currentBlock.rotation, scheme, #field[1], #field)
 	--play._draw_block(player2.currentBlock.type, player1.currentBlock.position, player1.currentBlock.rotation)
 	-- player 1 is on the left
