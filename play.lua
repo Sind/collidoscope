@@ -102,7 +102,7 @@ function play.update(dt)
 	local offset_y = -0.532 + player1.currentBlock.y*size_y*2
 	
 	--layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
-	system:setPosition( player1.currentBlock.x*50 + 450, player1.currentBlock.y*50 + 100 )
+	system:setPosition( player1.currentBlock.x*50 + 450, player1.currentBlock.y*50 + 80 )
 	--system:setPosition(offset_x + (2)*size_x*2 , offset_y + (2)*size_y*2 )
 	system:update(dt) 
 end
