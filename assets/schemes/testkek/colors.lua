@@ -1,5 +1,5 @@
 return {
-   container = {179, 129, 132, 255},
-   highlight = {240, 179, 158, 255},
-   darker = {59, 62, 74, 255}
+   container = {240, 12, 43, 255},
+   highlight = {10, 255, 18, 255},
+   darker = {13, 22, 233, 255}
 }

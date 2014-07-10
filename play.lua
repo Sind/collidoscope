@@ -61,6 +61,10 @@ function play.load()
 	if DEBUG_DRAW then
 		mcan = love.graphics.newCanvas(1920/2, 1080)
 	end
+
+	-- particle system stuff
+	require "particlesystem1"
+	system:start()
 end
 function play._load_layer(name)
 
@@ -89,6 +93,18 @@ end
 function play.update(dt)
 	player1:update(dt)
 	player2:update(dt)
+
+	--update particle systems
+	local size_x = 0.0256
+	local size_y = 0.02534
+
+	local offset_x = -0.5947 + player1.currentBlock.x*size_x*2
+	local offset_y = -0.532 + player1.currentBlock.y*size_y*2
+	
+	--layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
+	system:setPosition( player1.currentBlock.x*50 + 450, player1.currentBlock.y*50 + 80 )
+	--system:setPosition(offset_x + (2)*size_x*2 , offset_y + (2)*size_y*2 )
+	system:update(dt) 
 end
 
 function play._debug_draw()
@@ -196,8 +212,13 @@ function play._do_draw(scheme_name)
 	layout.draw_layer(play.geometry.containers, scheme)
 	layout.draw_layer(play.geometry.bg_light, scheme)
 	layout.draw_layer(play.geometry.bg_dark, scheme)
+	
 	play._draw_first_board(field, scheme)
 	play._draw_second_board(field, scheme)
+
+	-- particle system for player 1
+	love.graphics.draw(system)
+	
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
