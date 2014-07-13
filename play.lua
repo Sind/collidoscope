@@ -192,14 +192,22 @@ function play._do_draw(scheme_name)
 	--block position is described as playerx.currentBlock.x and playerx.currentBlock.y
 end
 
+-- global canvas cache
+canvas = nil
+
 function play._draw_board(board, scheme, w, h, player1, player2)
 	local width = w
 	local height = h
 	local block_width = width / #board[1]
 	local block_height = height / #board
 	
-	-- todo: don't recreate this canvas every time, cache it
-	local canvas = love.graphics.newCanvas(width, height)
+	-- don't recreate this canvas every time, cache it
+	-- field size can never change in one game.
+	if not canvas then
+		canvas = love.graphics.newCanvas(width, height)
+		dbg.debug("Created " .. width .. "x" .. height .. " canvas.")
+	end
+	
 	canvas:clear(255, 0, 0, 255)
 	love.graphics.setCanvas(canvas)
 	love.graphics.setShader(play._tile_shader)
