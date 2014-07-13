@@ -216,19 +216,25 @@ function play._do_draw(scheme_name)
 	layout.draw_layer(play.geometry.containers, scheme)
 	layout.draw_layer(play.geometry.bg_light, scheme)
 	layout.draw_layer(play.geometry.bg_dark, scheme)
-	
-	play._draw_first_board(field, scheme)
-	play._draw_second_board(field, scheme)
+
+	local x, y, w, h = layout.place_canvas(-0.312, 0, 0.27-0.01, 0.52-0.01)
+	local board = play._draw_board(field, scheme, w, h, player1, player2)
+	love.graphics.draw(board, x, y)
+	local x, y, w, h = layout.place_canvas(0.312, 0, 0.27-0.01, 0.52-0.01)
+	love.graphics.draw(board, x + w, y + h, math.pi)
+	-- TODO: delete these functions. We're using a canvas now anyway.
+	--play._draw_first_board(field, scheme)
+	--play._draw_second_board(field, scheme)
 
 	-- particle system for player 1
-	love.graphics.draw(system)
-	love.graphics.draw(system2)
+	--love.graphics.draw(system)
+	--love.graphics.draw(system2)
 	
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
-	play._draw_first_block(player1.currentBlock.type, player1.currentBlock.x, player1.currentBlock.y, player1.currentBlock.rotation, scheme, #field[1], #field)
-	play._draw_second_block(player2.currentBlock.type, player2.currentBlock.x, player2.currentBlock.y, player2.currentBlock.rotation, scheme, #field[1], #field)
+	--play._draw_first_block(player1.currentBlock.type, player1.currentBlock.x, player1.currentBlock.y, player1.currentBlock.rotation, scheme, #field[1], #field)
+	--play._draw_second_block(player2.currentBlock.type, player2.currentBlock.x, player2.currentBlock.y, player2.currentBlock.rotation, scheme, #field[1], #field)
 	--play._draw_block(player2.currentBlock.type, player1.currentBlock.position, player1.currentBlock.rotation)
 	-- player 1 is on the left
 	--player1.currentBlock has info for current block(type, position,rotation)
@@ -245,6 +251,69 @@ function play._do_draw(scheme_name)
 	--block position is described as playerx.currentBlock.x and playerx.currentBlock.y
 end
 
+function play._draw_board(board, scheme, w, h, player1, player2)
+	local width = w
+	local height = h
+	local block_width = width / #board[1]
+	local block_height = height / #board
+	
+	-- todo: don't recreate this canvas every time, cache it
+	local canvas = love.graphics.newCanvas(width, height)
+	canvas:clear(255, 0, 0, 255)
+	love.graphics.setCanvas(canvas)
+	love.graphics.setShader(play._tile_shader)
+
+	-- draw the actual playfield
+	for i = #board,1,-1 do
+		for j = #board[i],1,-1 do
+			if field[i][j] == 1 then
+				play._tile_shader:send("pattern", scheme.pattern_light)
+				love.graphics.rectangle("fill", (j-1)*block_width, (i-1)*block_height, block_width, block_height)
+			else
+				play._tile_shader:send("pattern", scheme.pattern_dark)
+				love.graphics.rectangle("fill", (j-1)*block_width, (i-1)*block_height, block_width, block_height)
+			end
+		end
+	end
+
+	-- draw player1s block
+	local cblock = block_layouts[player1.currentBlock.type][player1.currentBlock.rotation]
+	play._tile_shader:send("pattern", scheme.pattern_light)
+
+	local offset_x = player1.currentBlock.x*block_width
+	local offset_y = player1.currentBlock.y*block_height
+	for i = 1,#cblock do
+		v = cblock[i]
+                for j = 1,#cblock[i] do
+			u = cblock[i][j]
+			if u == 1 then
+				love.graphics.rectangle("fill", offset_x + (j-2)*block_width, offset_y + (i-2)*block_height, block_width, block_height)
+			end
+		end
+	end
+
+	-- draw player2s block
+	local cblock = block_layouts[player2.currentBlock.type][player2.currentBlock.rotation]
+
+	play._tile_shader:send("pattern", scheme.pattern_dark)
+
+	local offset_x = (#board[1] - player2.currentBlock.x)*block_width
+	local offset_y = (#board - player2.currentBlock.y)*block_height
+	for i = #cblock,1,-1 do -- row
+		v = cblock[i]
+		for j = #cblock[i],1,-1 do -- column
+			u = cblock[i][j]
+			if u == 1 then
+				love.graphics.rectangle("fill", offset_x + (1-j)*block_width, offset_y + (1-i)*block_height, block_width, block_height)
+			end
+		end
+	end
+
+	
+	love.graphics.setShader()
+	love.graphics.setCanvas()
+	return canvas
+end
 
 function play._draw_second_board(board, scheme)
 	local size_x = 0.0256

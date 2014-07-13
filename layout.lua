@@ -46,6 +46,17 @@ function layout.rect(virtual_x, virtual_y, virtual_width, virtual_height)
 	end
 end
 
+function layout.place_canvas(virtual_x, virtual_y, virtual_width, virtual_height)
+	-- helper function that returns physical x, y, w, h coordinates,
+	-- specifically for drawing the canvas.
+	local virtual_x = virtual_x - virtual_width
+	local virtual_y = virtual_y - virtual_height
+	
+	local phys_x, phys_y = layout._virtual_to_physical(virtual_x, virtual_y)
+	phys_width, phys_height = layout._virtual_to_physical_dimensions(virtual_width, virtual_height)
+	return phys_x, phys_y, phys_width, phys_height
+end
+
 function layout.draw_layer(layer, scheme)
 	-- layout.draw_layer(layer)
 	-- draws an entire layer of geometry at once.
