@@ -1,5 +1,6 @@
 require "layout"
 require "dbg"
+require "smoke"
 
 play = {}
 field = {
@@ -61,12 +62,6 @@ function play.load()
 	if DEBUG_DRAW then
 		mcan = love.graphics.newCanvas(1920/2, 1080)
 	end
-
-	-- particle system stuff
-	require "particlesystem1"
-	require "particlesystem2"
-	system:start()
-	system2:start()
 end
 function play._load_layer(name)
 
@@ -104,11 +99,15 @@ function play.update(dt)
 	local offset_y = -0.532 + player1.currentBlock.y*size_y*2
 	
 	--layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
-	system:setPosition( player1.currentBlock.x*50 + 450, player1.currentBlock.y*50 + 80 )
-	system2:setPosition( player1.currentBlock.x*50 + 450, player1.currentBlock.y*50 + 80 )
+	--system:setPosition( player1.currentBlock.x*50 + 450, player1.currentBlock.y*50 + 80 )
 	--system:setPosition(offset_x + (2)*size_x*2 , offset_y + (2)*size_y*2 )
-	system:update(dt) 
-	system2:update(dt) 
+	--smoke:update(dt)
+	for k,v in pairs(horizontal_particles) do
+		v:update(dt)
+	end
+	for k,v in pairs(vertical_particles) do
+		v:update(dt)
+	end
 end
 
 function play._debug_draw()
@@ -143,8 +142,36 @@ function play.draw(debug_draw)
 
 end
 
+function play._contains_coordinates(tab, element)
+	for _, value in ipairs(tab) do
+		if value[1] == element[1] and value[2] == element[2] then
+			return true
+		end
+	end
+	return false
+end
+function play._indexof_coordinates(tab, element)
+	for i, value in ipairs(tab) do
+		if value[1] == element[1] and value[2] == element[2] then
+			return i
+		end
+	end
+	return false
+end
+function play._remove_coordinates(tab, element)
+	local index = play._indexof_coordinates(tab, element)
+	table.remove(tab, index)
+end
+	
 
+horizontal_particles = {}
+vertical_particles = {}
+horizontal_edges = {}
+vertical_edges = {}
+
+counter = 0
 function play._do_draw(scheme_name)
+	counter = counter+1
 	-- play._do_draw(scheme_name)
 	-- takes care of all the drawing for the gamefield
 	-- takes a scheme name, which will determine
@@ -162,18 +189,71 @@ function play._do_draw(scheme_name)
 	layout.draw_layer(play.geometry.containers, scheme)
 	layout.draw_layer(play.geometry.bg_light, scheme)
 	layout.draw_layer(play.geometry.bg_dark, scheme)
-
 	local x, y, w, h = layout.place_canvas(-0.312, 0, 0.27-0.01, 0.52-0.01)
-	local board = play._draw_board(field, scheme, w, h, player1, player2)
+	
+	-- draw board
+	local board = play._draw_board(field, scheme, w, h, player1, player2, horizontal_append_buffer, vertical_append_buffer)
+	
+	local new_horizontal_edges, new_vertical_edges = play._compute_edges(field)
+	for _, e in ipairs(new_horizontal_edges) do
+		if not play._contains_coordinates(horizontal_edges, e) then
+			table.insert(horizontal_edges, 1, e)
+			local x1 = (e[1]+1) * (w/#field[1])
+			local y1 = (e[2]) * (h/#field)
+			dbg.debug("edge created: " .. x1 .. ", " .. y1)
+			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
+			stuff = smoke.create(x1, y1, "horizontal", w/#field[1], h/#field)
+			horizontal_particles[index_string] = stuff
+			-- this edge did not exist previously, add it
+		end
+	end
+	for _, e in ipairs(horizontal_edges) do
+		if not play._contains_coordinates(new_horizontal_edges, e) then
+			play._remove_coordinates(horizontal_edges, e)
+			local x1 = (e[1]+1) * (w/#field[1])
+			local y1 = (e[2]) * (h/#field)
+			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
+			-- this edge has ceased existing, remove it
+			horizontal_particles[index_string] = nil
+		end
+	end
+	for _, e in ipairs(new_vertical_edges) do
+		if not play._contains_coordinates(vertical_edges, e) then
+			table.insert(vertical_edges, 1, e)
+			local x1 = (e[1]) * (w/#field[1])
+			local y1 = (e[2]+1) * (h/#field)
+			dbg.debug("edge created: " .. x1 .. ", " .. y1)
+			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
+			stuff = smoke.create(x1, y1, "vertical", w/#field[1], h/#field)
+			vertical_particles[index_string] = stuff
+			-- this edge did not exist previously, add it
+		end
+	end
+	for _, e in ipairs(vertical_edges) do
+		if not play._contains_coordinates(new_vertical_edges, e) then
+			play._remove_coordinates(vertical_edges, e)
+			local x1 = (e[1]) * (w/#field[1])
+			local y1 = (e[2]+1) * (h/#field)
+			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
+			-- this edge has ceased existing, remove it
+			vertical_particles[index_string] = nil
+		end
+	end
+
+	love.graphics.setCanvas(board)
+	for k,v in pairs(horizontal_particles) do
+		love.graphics.draw(v)
+	end
+	for k,v in pairs(vertical_particles) do
+		love.graphics.draw(v)
+	end
+	love.graphics.setCanvas()
+
 	love.graphics.draw(board, x, y)
 	local x, y, w, h = layout.place_canvas(0.312, 0, 0.27-0.01, 0.52-0.01)
 	love.graphics.draw(board, x + w, y + h, math.pi)
 
-
-	-- particle system for player 1
-	--love.graphics.draw(system)
-	--love.graphics.draw(system2)
-	
+		
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
@@ -195,7 +275,7 @@ end
 -- global canvas cache
 canvas = nil
 
-function play._draw_board(board, scheme, w, h, player1, player2)
+function play._draw_board(board, scheme, w, h, player1, player2, horizontal_append_buffer, vertical_append_buffer)
 	local width = w
 	local height = h
 	local block_width = width / #board[1]
@@ -232,9 +312,9 @@ function play._draw_board(board, scheme, w, h, player1, player2)
 	local offset_x = player1.currentBlock.x*block_width
 	local offset_y = player1.currentBlock.y*block_height
 	for i = 1,#cblock do
-		v = cblock[i]
+		local v = cblock[i]
                 for j = 1,#cblock[i] do
-			u = cblock[i][j]
+			local u = cblock[i][j]
 			if u == 1 then
 				love.graphics.rectangle("fill", offset_x + (j-2)*block_width, offset_y + (i-2)*block_height, block_width, block_height)
 			end
@@ -249,18 +329,36 @@ function play._draw_board(board, scheme, w, h, player1, player2)
 	local offset_x = (#board[1] - player2.currentBlock.x)*block_width
 	local offset_y = (#board - player2.currentBlock.y)*block_height
 	for i = #cblock,1,-1 do -- row
-		v = cblock[i]
+		local v = cblock[i]
 		for j = #cblock[i],1,-1 do -- column
-			u = cblock[i][j]
+			local u = cblock[i][j]
 			if u == 1 then
 				love.graphics.rectangle("fill", offset_x + (1-j)*block_width, offset_y + (1-i)*block_height, block_width, block_height)
 			end
 		end
 	end
 
-	
 	love.graphics.setShader()
 	love.graphics.setCanvas()
 	return canvas
 end
 
+
+
+function play._compute_edges(board)
+	local board_width = #board[1]
+	local board_height = #board
+	vertical_append_buffer = {} -- contains vertical edges
+	horizontal_append_buffer = {} -- contains horizontal edges
+	for y = 1,(board_height-1) do
+		for x = 1,(board_width) do
+			if not (board[y][x] == board[y][x+1]) then
+				table.insert(vertical_append_buffer, 1, {x, y-1})
+			end
+			if not (board[y][x] == board[y+1][x]) then
+				table.insert(horizontal_append_buffer, 1, {x-1, y})
+			end
+		end
+	end
+	return horizontal_append_buffer, vertical_append_buffer
+end
