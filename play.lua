@@ -143,60 +143,6 @@ function play.draw(debug_draw)
 
 end
 
-function play._draw_first_block(blocktype, x, y, rotation, scheme, field_width, field_height)
-	local size_x = 0.0256
-	local size_y = 0.02534
-
-	local offset_x = -0.5947 + x*size_x*2
-	local offset_y = -0.532 + y*size_y*2
-	
-	local cblock = block_layouts[blocktype][rotation]
-	for i,v in ipairs(cblock) do
-                for j,u in ipairs(v) do
-			if u == 1 then
-				love.graphics.setShader(play._tile_shader)
-				play._tile_shader:send("pattern", scheme.pattern_light)
-				layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
-				love.graphics.setShader()
-			end
-		end
-	end
-	local size_x = 0.0256
-	local size_y = 0.02534
-
-	local offset_x = 0.05947 + (size_x*(field_width*2 + 1) + (x - field_width - 1)*size_x*2)
-	--local offset_y = -0.0532 + size_y*(field_height + 3) + (y - field_height - 1)*size_y*2
-	local offset_y = -0.532 + field_width*size_y*4 - y*size_y*2
-	for i,v in ipairs(cblock) do
-                for j,u in ipairs(v) do
-			if u == 1 then
-				love.graphics.setShader(play._tile_shader)
-				play._tile_shader:send("pattern", scheme.pattern_light)
-				layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
-				love.graphics.setShader()
-			end
-		end
-	end
-end
-function play._draw_second_block(blocktype, x, y, rotation, scheme, field_width, field_height)
-	local size_x = 0.0256
-	local size_y = 0.02534
-
-	local offset_x = 0.05947 + size_x*(field_width*2 + 1) + (x - field_width - 1)*size_x*2
-	local offset_y = -0.0532 + size_y*(field_height + 3) + (y - field_height - 1)*size_y*2
-	
-	local cblock = block_layouts[blocktype][rotation]
-	for i,v in ipairs(cblock) do
-                for j,u in ipairs(v) do
-			if u == 1 then
-				love.graphics.setShader(play._tile_shader)
-				play._tile_shader:send("pattern", scheme.pattern_dark)
-				layout.rect(offset_x + ((j-1))*size_x*2, offset_y + ((i-1))*size_y*2, size_x, size_y)
-				love.graphics.setShader()
-			end
-		end
-	end
-end
 
 function play._do_draw(scheme_name)
 	-- play._do_draw(scheme_name)
@@ -222,9 +168,7 @@ function play._do_draw(scheme_name)
 	love.graphics.draw(board, x, y)
 	local x, y, w, h = layout.place_canvas(0.312, 0, 0.27-0.01, 0.52-0.01)
 	love.graphics.draw(board, x + w, y + h, math.pi)
-	-- TODO: delete these functions. We're using a canvas now anyway.
-	--play._draw_first_board(field, scheme)
-	--play._draw_second_board(field, scheme)
+
 
 	-- particle system for player 1
 	--love.graphics.draw(system)
@@ -233,9 +177,6 @@ function play._do_draw(scheme_name)
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
-	--play._draw_first_block(player1.currentBlock.type, player1.currentBlock.x, player1.currentBlock.y, player1.currentBlock.rotation, scheme, #field[1], #field)
-	--play._draw_second_block(player2.currentBlock.type, player2.currentBlock.x, player2.currentBlock.y, player2.currentBlock.rotation, scheme, #field[1], #field)
-	--play._draw_block(player2.currentBlock.type, player1.currentBlock.position, player1.currentBlock.rotation)
 	-- player 1 is on the left
 	--player1.currentBlock has info for current block(type, position,rotation)
 	--same for player2
@@ -315,62 +256,3 @@ function play._draw_board(board, scheme, w, h, player1, player2)
 	return canvas
 end
 
-function play._draw_second_board(board, scheme)
-	local size_x = 0.0256
-	local size_y = 0.02534
-
-	local offset_x = 0.05947 + size_x*(#board[1]*2 + 1)
-	local offset_y = -0.0532 + size_y*(#board + 3)
-	
-	for i = #board,1,-1 do
-		for j = #board[i],1,-1 do
-			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
-			if field[i][j] == 1 then
-				love.graphics.setShader(play._tile_shader)
-				play._tile_shader:send("pattern", scheme.pattern_light)
-				layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
-				love.graphics.setShader()
-			else
-				love.graphics.setShader(play._tile_shader)
-				play._tile_shader:send("pattern", scheme.pattern_dark)
-				layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
-				love.graphics.setShader()
-				--layout.rect(offset_x - j*size_x*2, offset_y - i*size_y*2, size_x, size_y)
-			end
-			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
-		end
-	end
-	love.graphics.setColor(255, 255, 255)
-end
-
-function play._draw_first_board(board, scheme)
-	-- play._draw_board(board)
-	-- draws the actual game board (not including moving pieces)
-	-- as passed into the board variable.
-	local offset_x = -0.5947
-	local offset_y = -0.532
-	local size_x = 0.0256
-	local size_y = 0.02534
-	
-	for i = 1,#board do
-		for j = 1,#board[i] do
-			love.graphics.setColor(field[i][j]*255,field[i][j]*255,field[i][j]*255)
-			if field[i][j] == 1 then
-				love.graphics.setShader(play._tile_shader)
-				play._tile_shader:send("pattern", scheme.pattern_light)
-				layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
-				love.graphics.setShader()
-			else
-				love.graphics.setShader(play._tile_shader)
-				play._tile_shader:send("pattern", scheme.pattern_dark)
-				layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
-				love.graphics.setShader()
-				--layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
-			end
-			--layout.rect(offset_x + j*size_x*2, offset_y + i*size_y*2, size_x, size_y)
-			--love.graphics.rectangle("fill", 50*j, 50*i, 50, 50)
-		end
-	end
-	
-	love.graphics.setColor(255, 255, 255)
-end
