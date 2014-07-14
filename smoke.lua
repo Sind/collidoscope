@@ -33,7 +33,7 @@
 -- spin_variation = 0
 smoke = {}
 function smoke.create(x, y, align, block_width, block_height)
-	local smoke = love.graphics.newParticleSystem( love.graphics.newImage("smoke.png"), 2000)
+	local smoke = love.graphics.newParticleSystem( love.graphics.newImage("assets/particle.png"), 2000)
 
 	if align == "horizontal" then
 		smoke:setPosition(x - block_width/2, y)
