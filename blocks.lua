@@ -11,6 +11,8 @@ spawn={
 	      }
 }
 
+swoosh = love.audio.newSource("assets/audio/sounds/swoosh.ogg")
+
 function block:init(t,parent)
 	self.rotation = 1
 	self.parent = parent
@@ -91,6 +93,8 @@ function block:merge()
 		end
 	end
 	self.parent.hasBlock = false
+	
+	love.audio.play(swoosh)
 end
 
 function block:draw()
