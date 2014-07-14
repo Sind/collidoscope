@@ -33,7 +33,7 @@
 -- spin_variation = 0
 smoke = {}
 function smoke.create(x, y, align, block_width, block_height)
-	local smoke = love.graphics.newParticleSystem( love.graphics.newImage("smoke.png"), 1000)
+	local smoke = love.graphics.newParticleSystem( love.graphics.newImage("smoke.png"), 2000)
 
 	if align == "horizontal" then
 		smoke:setPosition(x - block_width/2, y)
@@ -45,10 +45,10 @@ function smoke.create(x, y, align, block_width, block_height)
 	--smoke:setOffset(0, 0)
 	smoke:setEmissionRate(200)
 	smoke:setEmitterLifetime(-1)
-	smoke:setParticleLifetime(2.6)
-	smoke:setColors(255, 255, 255, 80)
-	smoke:setSizes(0.3, 0)
-	smoke:setSpeed(0.01, 10.1)
+	smoke:setParticleLifetime(0.9)
+	smoke:setColors(255, 255, 255, 60, 255, 255, 255, 60, 255, 255, 255, 255)
+	smoke:setSizes(0.8, 0.15, 0.15, 0.1, 0)
+	smoke:setSpeed(0.01, 40.1)
 	--smoke:setDirection(math.rad(0))
 	smoke:setSpread(math.rad(360))
 	smoke:setLinearAcceleration(1, 1, 1, 1)

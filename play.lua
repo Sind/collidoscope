@@ -98,15 +98,17 @@ function play.update(dt)
 	local offset_x = -0.5947 + player1.currentBlock.x*size_x*2
 	local offset_y = -0.532 + player1.currentBlock.y*size_y*2
 	
-	--layout.rect(offset_x + (j-1)*size_x*2, offset_y + (i-1)*size_y*2, size_x, size_y)
-	--system:setPosition( player1.currentBlock.x*50 + 450, player1.currentBlock.y*50 + 80 )
-	--system:setPosition(offset_x + (2)*size_x*2 , offset_y + (2)*size_y*2 )
-	--smoke:update(dt)
 	for k,v in pairs(horizontal_particles) do
 		v:update(dt)
+		if (not v:isActive()) and (v:getCount() == 0) then
+			horizontal_particles[k] = nil
+		end
 	end
 	for k,v in pairs(vertical_particles) do
 		v:update(dt)
+		if (not v:isActive()) and (v:getCount() == 0) == 0 then
+			vertical_particles[k] = nil
+		end
 	end
 end
 
@@ -200,7 +202,6 @@ function play._do_draw(scheme_name)
 			table.insert(horizontal_edges, 1, e)
 			local x1 = (e[1]+1) * (w/#field[1])
 			local y1 = (e[2]) * (h/#field)
-			dbg.debug("edge created: " .. x1 .. ", " .. y1)
 			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
 			stuff = smoke.create(x1, y1, "horizontal", w/#field[1], h/#field)
 			horizontal_particles[index_string] = stuff
@@ -209,12 +210,12 @@ function play._do_draw(scheme_name)
 	end
 	for _, e in ipairs(horizontal_edges) do
 		if not play._contains_coordinates(new_horizontal_edges, e) then
-			play._remove_coordinates(horizontal_edges, e)
 			local x1 = (e[1]+1) * (w/#field[1])
 			local y1 = (e[2]) * (h/#field)
 			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
 			-- this edge has ceased existing, remove it
-			horizontal_particles[index_string] = nil
+			local expired_system = horizontal_particles[index_string]:stop()
+			play._remove_coordinates(horizontal_edges, e)
 		end
 	end
 	for _, e in ipairs(new_vertical_edges) do
@@ -222,7 +223,6 @@ function play._do_draw(scheme_name)
 			table.insert(vertical_edges, 1, e)
 			local x1 = (e[1]) * (w/#field[1])
 			local y1 = (e[2]+1) * (h/#field)
-			dbg.debug("edge created: " .. x1 .. ", " .. y1)
 			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
 			stuff = smoke.create(x1, y1, "vertical", w/#field[1], h/#field)
 			vertical_particles[index_string] = stuff
@@ -231,12 +231,12 @@ function play._do_draw(scheme_name)
 	end
 	for _, e in ipairs(vertical_edges) do
 		if not play._contains_coordinates(new_vertical_edges, e) then
-			play._remove_coordinates(vertical_edges, e)
 			local x1 = (e[1]) * (w/#field[1])
 			local y1 = (e[2]+1) * (h/#field)
 			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
 			-- this edge has ceased existing, remove it
-			vertical_particles[index_string] = nil
+			local expired_system = vertical_particles[index_string]:stop()
+			play._remove_coordinates(vertical_edges, e)
 		end
 	end
 
@@ -352,7 +352,7 @@ function play._compute_edges(board)
 	horizontal_append_buffer = {} -- contains horizontal edges
 	for y = 1,(board_height-1) do
 		for x = 1,(board_width) do
-			if not (board[y][x] == board[y][x+1]) then
+			if not (board[y][x] == board[y][x+1]) and not (x == #board[1]) then
 				table.insert(vertical_append_buffer, 1, {x, y-1})
 			end
 			if not (board[y][x] == board[y+1][x]) then
