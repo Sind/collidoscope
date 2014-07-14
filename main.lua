@@ -14,11 +14,11 @@ VIRTUAL_X,VIRTUAL_Y = math.min(xpercent,ypercent)*16,math.min(xpercent,ypercent)
 
 function love.load(args)
 	math.randomseed(os.time())
-	DEBUG_DRAW = true
+	DEBUG_DRAW = false
 	if #args > 1 then
 		for argNum = 2,#args do
 			arg = args[argNum]
-			if arg == "amadiro" then DEBUG_DRAW = false end
+			if arg == "srod" then DEBUG_DRAW = true end
 			if arg == "grid" then GRID_DEBUG_DRAW = true end
 		end
 	end
@@ -32,15 +32,32 @@ function love.load(args)
 	settings = love.filesystem.load("settings.lua")()
 
 	love.graphics.setBackgroundColor(100,100,100,255)
-	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=false})
+	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=false, vsync=false})
 	
 	game = {play = play,menu = menu}
 	mode = "play"
 	init = true
 end
 
+last_time = 0
+deltas = {}
+framecounter = 0
 function love.update(dt)
 	-- love.window.setTitle("ponigb - " .. love.timer.getFPS().. " fps")
+	local now = love.timer.getTime()
+	local delta = now - last_time
+	table.insert(deltas, 1, delta)
+	last_time = now
+	framecounter = framecounter + 1
+
+	if framecounter % 400 == 0 then
+		local acc = 0
+		for i = 1, #deltas do
+			acc = acc + deltas[i]
+		end
+		dbg.info("Update time over the last 400 frames: " .. tostring(1000*acc/400) .. "ms (" .. love.timer.getFPS() .. ")")
+		deltas = {}
+	end
 
 	if init then
 		if game[mode].load then game[mode].load() end
