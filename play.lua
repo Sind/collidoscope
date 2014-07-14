@@ -32,6 +32,7 @@ function play._init_shaders()
 
         vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
         {
+		// TODO: the scaling here is just made up for testing, fix it.
 		vec2 st_coords = screen_coords / vec2(1920, 1080)*vec2(8*3, 4*3);
         	return Texel(pattern, st_coords);
         }
@@ -62,6 +63,19 @@ function play.load()
 	if DEBUG_DRAW then
 		mcan = love.graphics.newCanvas(1920/2, 1080)
 	end
+	-- particle scaler scales emission rate, size (to a lesser degree)
+	-- and particle lifetime.
+	-- Screen resolution is used as rough estimate. This works okay because
+	-- particle size and intensity should scale with screen-size anyway, and
+	-- because systems with smaller screens are likely somewhat less powerful
+	-- anyway (netbooks etc)
+	
+	-- experimentally determined values that work good:
+	-- 1920 - 1
+	-- 1280 - 0.8
+	-- 1024 - 0.5
+	-- width/1920
+	play._particle_scaler = (SCREEN_X/1920)*0.73 + 0.27
 end
 function play._load_layer(name)
 
@@ -195,7 +209,8 @@ function play._do_draw(scheme_name)
 	
 	-- draw board
 	local board = play._draw_board(field, scheme, w, h, player1, player2, horizontal_append_buffer, vertical_append_buffer)
-	
+
+	-- todo: refactor all this shit, its pretty awful.
 	local new_horizontal_edges, new_vertical_edges = play._compute_edges(field)
 	for _, e in ipairs(new_horizontal_edges) do
 		if not play._contains_coordinates(horizontal_edges, e) then
@@ -203,7 +218,7 @@ function play._do_draw(scheme_name)
 			local x1 = (e[1]+1) * (w/#field[1])
 			local y1 = (e[2]) * (h/#field)
 			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
-			stuff = smoke.create(x1, y1, "horizontal", w/#field[1], h/#field)
+			stuff = smoke.create(x1, y1, "horizontal", w/#field[1], h/#field, play._particle_scaler)
 			horizontal_particles[index_string] = stuff
 			-- this edge did not exist previously, add it
 		end
@@ -224,7 +239,7 @@ function play._do_draw(scheme_name)
 			local x1 = (e[1]) * (w/#field[1])
 			local y1 = (e[2]+1) * (h/#field)
 			local index_string = tostring(e[1]) .. "," .. tostring(e[2])
-			stuff = smoke.create(x1, y1, "vertical", w/#field[1], h/#field)
+			stuff = smoke.create(x1, y1, "vertical", w/#field[1], h/#field, play._particle_scaler)
 			vertical_particles[index_string] = stuff
 			-- this edge did not exist previously, add it
 		end
