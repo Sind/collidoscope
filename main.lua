@@ -15,11 +15,15 @@ VIRTUAL_X,VIRTUAL_Y = math.min(xpercent,ypercent)*16,math.min(xpercent,ypercent)
 function love.load(args)
 	math.randomseed(os.time())
 	DEBUG_DRAW = false
+	VSYNC = true
+	FULLSCREEN = true
 	if #args > 1 then
 		for argNum = 2,#args do
 			arg = args[argNum]
 			if arg == "srod" then DEBUG_DRAW = true end
 			if arg == "grid" then GRID_DEBUG_DRAW = true end
+			if arg == "nofs" then FULLSCREEN = false end
+			if arg == "novsync" then VSYNC = false end
 		end
 	end
 	require "binding"
@@ -32,7 +36,7 @@ function love.load(args)
 	settings = love.filesystem.load("settings.lua")()
 
 	love.graphics.setBackgroundColor(100,100,100,255)
-	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=false, vsync=false})
+	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=FULLSCREEN, vsync=VSYNC})
 	
 	game = {play = play,menu = menu}
 	mode = "play"
@@ -43,7 +47,6 @@ last_time = 0
 deltas = {}
 framecounter = 0
 function love.update(dt)
-	-- love.window.setTitle("ponigb - " .. love.timer.getFPS().. " fps")
 	local now = love.timer.getTime()
 	local delta = now - last_time
 	table.insert(deltas, 1, delta)
