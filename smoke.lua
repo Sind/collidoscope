@@ -13,7 +13,6 @@ function smoke.create(x, y, align, block_width, block_height, emission_scaler)
 		smoke:setAreaSpread("uniform", 0, block_height/2)
 	end
 	--smoke:setOffset(0, 0)
-	print("scale: " .. tostring(emission_scaler))
 	smoke:setEmissionRate(200*emission_scaler)
 	smoke:setEmitterLifetime(-1)
 	smoke:setParticleLifetime(1.9*emission_scaler)

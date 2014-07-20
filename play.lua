@@ -74,11 +74,15 @@ function play.load()
 	-- anyway (netbooks etc)
 	
 	-- experimentally determined values that work good:
+	-- 
 	-- 1920 - 1
 	-- 1280 - 0.8
 	-- 1024 - 0.5
 	-- width/1920
 	play._particle_scaler = (SCREEN_X/1920)*0.73 + 0.27
+	if SCREEN_X > 2500 then -- mostly for iMacs, which have huge screens and shit GPUs
+	   play._particle_scaler = 1.0
+	end
 end
 function play._load_layer(name)
 
