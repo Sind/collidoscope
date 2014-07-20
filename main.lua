@@ -24,8 +24,10 @@ function love.load(args)
 			if arg == "grid" then GRID_DEBUG_DRAW = true end
 			if arg == "nofs" then FULLSCREEN = false end
 			if arg == "novsync" then VSYNC = false end
+			if arg == "-skin" then skinName = args[argNum+1] end
 		end
 	end
+	skinName = skinName or "goldfish";
 	require "binding"
 	require "helpfuncs"
 	require "class"

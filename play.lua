@@ -161,7 +161,7 @@ function play.draw(debug_draw)
 	if debug_draw then
 		play._debug_draw()
 	else
-		play._do_draw('goldfish')
+		play._do_draw(skinName)
 	end
 
 end
