@@ -57,6 +57,7 @@ function play.load()
 	play._load_scheme('adrift')
 	play._load_scheme('sky')
 	play._load_scheme('moon')
+	play._load_scheme('goldfish')
 	play.geometry = {}
 	play._load_layer('containers')
 	play._load_layer('bg_light')
@@ -160,7 +161,7 @@ function play.draw(debug_draw)
 	if debug_draw then
 		play._debug_draw()
 	else
-		play._do_draw('moon')
+		play._do_draw('goldfish')
 	end
 
 end
