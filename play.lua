@@ -5,6 +5,7 @@ require "smoke"
 play = {}
 field = {}
 
+
 function play._init_shaders()
 	tile_shader = love.graphics.newShader([[
 	extern Image pattern;
@@ -39,17 +40,7 @@ function play.load()
 	-- play.load()
 	-- load initial assets, initialize schemes we're going to use.
 
-	play.scheme = {}
-	play._load_scheme('clairdelune')
-	play._load_scheme('adrift')
-	play._load_scheme('sky')
-	play._load_scheme('moon')
-	play._load_scheme('goldfish')
-	play.geometry = {}
-	play._load_layer('containers')
-	play._load_layer('bg_light')
-	play._load_layer('bg_dark')
-	play._init_shaders()
+
 
 	-- if DEBUG_DRAW then
 	-- 	mcan = love.graphics.newCanvas(1920/2, 1080)
@@ -378,6 +369,17 @@ function play._compute_edges(board)
 	return horizontal_append_buffer, vertical_append_buffer
 end
 
+play.scheme = {}
+play._load_scheme('clairdelune')
+play._load_scheme('adrift')
+play._load_scheme('sky')
+play._load_scheme('moon')
+play._load_scheme('goldfish')
+play.geometry = {}
+play._load_layer('containers')
+play._load_layer('bg_light')
+play._load_layer('bg_dark')
+play._init_shaders()
 -- function play.restart()
 -- 	play.clear_field()
 -- 	player1:spawnBlock()
