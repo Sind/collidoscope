@@ -2,15 +2,6 @@ block = class()
 
 blockTypes = {[1]="iblock",[2]="lblock",[3]="jblock",[4]="tblock",[5]="oblock",[6]="zblock",[7]="sblock"}
 
-spawn={
-	[1] = {
-
-	},
-	[2] = {
-
-	}
-}
-
 swoosh = love.audio.newSource("assets/audio/sounds/swoosh.ogg")
 swoosh:setVolume(0.8)
 
@@ -27,6 +18,7 @@ end
 function block:update(dt)
 	self.mainTime = self.mainTime + dt
 	self.subTime = self.subTime + dt
+
 
 	if binding.pressed["p"..self.parent.playerNum.."r"] then
 		self.x = self.x+1
@@ -46,6 +38,14 @@ function block:update(dt)
 		if self:collides() then self.rotation = (self.rotation-2)%#block_layouts[self.type] + 1 end
 	end
 
+	if binding.pressed["p"..self.parent.playerNum.."s"] then
+		while true do
+			self.y = self.y+1;
+			if self:collides() then self.y = self.y-1; self:merge(); return end
+		end
+	end
+
+
 	if binding.isDown["p"..self.parent.playerNum.."d"] and self.subTime > SUB_TIME then
 		while self.subTime > SUB_TIME do self.subTime = self.subTime - SUB_TIME end
 		self.mainTime = self.subTime
@@ -57,6 +57,7 @@ function block:update(dt)
 		self.y = self.y + 1
 		if self:collides() then self.y = self.y-1;self:merge() end
 	end
+
 end
 
 function block:collides()
