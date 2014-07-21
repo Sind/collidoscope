@@ -3,28 +3,8 @@ require "dbg"
 require "smoke"
 
 play = {}
-field = {
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0},
-	{1,1,1,1,1,1,1,1,1,1},
-	{1,1,1,1,1,1,1,1,1,1},
-	{1,1,1,1,1,1,1,1,1,1},
-	{1,1,1,1,1,1,1,1,1,1},
-	{1,1,1,1,1,1,1,1,1,1},
-	{1,1,1,1,1,1,1,1,1,1},
-	{1,1,1,1,1,1,1,1,1,1},
-	{1,1,1,1,1,1,1,1,1,1},
-	{1,1,1,1,1,1,1,1,1,1},
-	{1,1,1,1,1,1,1,1,1,1}
-}
+field = {}
+play.winometer = 0 -- which player is winning? (player1 positive, 2 neg)
 
 function play._init_shaders()
 	tile_shader = love.graphics.newShader([[
@@ -82,8 +62,10 @@ function play.load()
 	-- width/1920
 	play._particle_scaler = (SCREEN_X/1920)*0.73 + 0.27
 	if SCREEN_X > 2500 then -- mostly for iMacs, which have huge screens and shit GPUs
-	   play._particle_scaler = 1.0
+		play._particle_scaler = 1.0
 	end
+
+	play.clear_field()
 end
 function play._load_layer(name)
 
@@ -163,6 +145,9 @@ function play.draw(debug_draw)
 	else
 		play._do_draw('goldfish')
 	end
+	
+	-- todo, put the winometer draws somewhere :D
+	play.debug_draw_winometer()
 
 end
 
@@ -186,7 +171,7 @@ function play._remove_coordinates(tab, element)
 	local index = play._indexof_coordinates(tab, element)
 	table.remove(tab, index)
 end
-	
+
 
 horizontal_particles = {}
 vertical_particles = {}
@@ -276,7 +261,7 @@ function play._do_draw(scheme_name)
 	local x, y, w, h = layout.place_canvas(0.312, 0, 0.27-0.01, 0.52-0.01)
 	love.graphics.draw(board, x + w, y + h, math.pi)
 
-		
+	
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
@@ -384,4 +369,43 @@ function play._compute_edges(board)
 		end
 	end
 	return horizontal_append_buffer, vertical_append_buffer
+end
+
+function play.restart()
+	play.clear_field()
+	player1:spawnBlock()
+	player2:spawnBlock()
+	dbg.debug("winometer: "..play.winometer)
+end
+
+function play.clear_field()
+	field = {
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1}
+	}
+end
+
+-- :D
+function play.debug_draw_winometer()
+	love.graphics.setColor(0,0,0,255)
+	love.graphics.rectangle("fill", 120, 540, 50, 1+(50*play.winometer))
+	love.graphics.setColor(255,255,255,255)
 end
