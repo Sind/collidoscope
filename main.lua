@@ -40,6 +40,18 @@ function love.load(args)
 	love.graphics.setBackgroundColor(100,100,100,255)
 	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=FULLSCREEN, vsync=VSYNC})
 	
+	play.scheme = {}
+	play._load_scheme('clairdelune')
+	play._load_scheme('adrift')
+	play._load_scheme('sky')
+	play._load_scheme('moon')
+	play._load_scheme('goldfish')
+	play.geometry = {}
+	play._load_layer('containers')
+	play._load_layer('bg_light')
+	play._load_layer('bg_dark')
+	play._init_shaders()
+	
 	game = {play = play,menu = menu}
 	mode = "play"
 	init = true
