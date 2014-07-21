@@ -86,17 +86,17 @@ function block:merge()
 	for i,v in ipairs(cblock) do
 		for j,u in ipairs(v) do
 			if u == 1 then
-				if field[self.y+i-1] == nil or
-				field[self.y+i-1][self.x+j-1] == nil then
-					if self.parent.playerNum == 1 then
-						play.winometer = play.winometer + 1
-					else
-						play.winometer = play.winometer - 1		
-					end
-					play.restart()
-					return
-				end
-				if self.parent.playerNum == 1 then
+				if field[self.y+i-1] == nil then
+					-- if self.parent.playerNum == 1 then
+					-- 	play.winometer = play.winometer + 1
+					-- else
+					-- 	play.winometer = play.winometer - 1		
+					-- end
+					-- play.restart()
+					-- exit = true
+					-- return
+					self.parent.ended = true
+				elseif self.parent.playerNum == 1 then
 					field[self.y+i-1][self.x+j-1] = 1
 				else
 					field[FIELD_SIZE_Y-self.y-i+2][FIELD_SIZE_X-self.x-j+2] = 0

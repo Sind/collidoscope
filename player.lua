@@ -8,6 +8,7 @@ function player:init(num)
 end
 
 function player:update(dt)
+	if self.ended then return end
 	if not self.hasBlock then
 		self:spawnBlock()
 		self.hasBlock = true

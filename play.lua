@@ -4,7 +4,6 @@ require "smoke"
 
 play = {}
 field = {}
-play.winometer = 0 -- which player is winning? (player1 positive, 2 neg)
 
 function play._init_shaders()
 	tile_shader = love.graphics.newShader([[
@@ -25,6 +24,14 @@ function play._init_shaders()
 end
 
 function play.load()
+	field = {}
+	for i = 1,FIELD_SIZE_Y do
+		field[i] = {}
+		for j = 1,FIELD_SIZE_X do
+			field[i][j] = (i <= FIELD_SIZE_Y/2) and 0 or 1
+		end
+	end
+
 	play.images = {}
 	
 	player1 = player:new(1)
@@ -44,9 +51,9 @@ function play.load()
 	play._load_layer('bg_dark')
 	play._init_shaders()
 
-	if DEBUG_DRAW then
-		mcan = love.graphics.newCanvas(1920/2, 1080)
-	end
+	-- if DEBUG_DRAW then
+	-- 	mcan = love.graphics.newCanvas(1920/2, 1080)
+	-- end
 	-- particle scaler scales emission rate, size (to a lesser degree)
 	-- and particle lifetime.
 	-- Screen resolution is used as rough estimate. This works okay because
@@ -65,7 +72,7 @@ function play.load()
 		play._particle_scaler = 1.0
 	end
 
-	play.clear_field()
+	-- play.clear_field()
 end
 function play._load_layer(name)
 
@@ -94,7 +101,7 @@ end
 function play.update(dt)
 	player1:update(dt)
 	player2:update(dt)
-
+	if(player1.ended and player2.ended and love.keyboard.isDown(" ")) then exit = true end
 	--update particle systems
 	local size_x = 0.0256
 	local size_y = 0.02534
@@ -147,7 +154,7 @@ function play.draw(debug_draw)
 	end
 	
 	-- todo, put the winometer draws somewhere :D
-	play.debug_draw_winometer()
+	-- play.debug_draw_winometer()
 
 end
 
@@ -371,41 +378,16 @@ function play._compute_edges(board)
 	return horizontal_append_buffer, vertical_append_buffer
 end
 
-function play.restart()
-	play.clear_field()
-	player1:spawnBlock()
-	player2:spawnBlock()
-	dbg.debug("winometer: "..play.winometer)
-end
-
-function play.clear_field()
-	field = {
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1}
-	}
-end
+-- function play.restart()
+-- 	play.clear_field()
+-- 	player1:spawnBlock()
+-- 	player2:spawnBlock()
+-- 	dbg.debug("winometer: "..play.winometer)
+-- end
 
 -- :D
-function play.debug_draw_winometer()
-	love.graphics.setColor(0,0,0,255)
-	love.graphics.rectangle("fill", 120, 540, 50, 1+(50*play.winometer))
-	love.graphics.setColor(255,255,255,255)
-end
+-- function play.debug_draw_winometer()
+-- 	love.graphics.setColor(0,0,0,255)
+-- 	love.graphics.rectangle("fill", 120, 540, 50, 1+(50*play.winometer))
+-- 	love.graphics.setColor(255,255,255,255)
+-- end
