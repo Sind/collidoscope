@@ -356,13 +356,15 @@ function play._compute_edges(board)
 	local board_height = #board
 	vertical_append_buffer = {} -- contains vertical edges
 	horizontal_append_buffer = {} -- contains horizontal edges
-	for y = 1,(board_height-1) do
+	for y = 1,(board_height) do
 		for x = 1,(board_width) do
 			if not (board[y][x] == board[y][x+1]) and not (x == #board[1]) then
 				table.insert(vertical_append_buffer, 1, {x, y-1})
 			end
-			if not (board[y][x] == board[y+1][x]) then
-				table.insert(horizontal_append_buffer, 1, {x-1, y})
+			if y ~= board_height then
+			   if not (board[y][x] == board[y+1][x]) then
+			      table.insert(horizontal_append_buffer, 1, {x-1, y})
+			   end
 			end
 		end
 	end
