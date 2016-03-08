@@ -190,7 +190,7 @@ function play._do_draw(scheme_name)
 	local scheme = play.scheme[scheme_name]
 
 	-- draw background
-	love.graphics.draw(scheme.background)
+	love.graphics.draw(scheme.background, 0, 0, 0, love.graphics.getWidth()/scheme.background:getWidth(), love.graphics.getHeight()/scheme.background:getHeight())
 
 	-- draw containers
 	layout.draw_layer(play.geometry.containers, scheme)
