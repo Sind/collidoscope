@@ -34,7 +34,7 @@ function play.load()
 	end
 
 	play.images = {}
-	
+
 	player1 = player:new(1)
 	player2 = player:new(2)
 	-- play.load()
@@ -51,9 +51,9 @@ function play.load()
 	-- particle size and intensity should scale with screen-size anyway, and
 	-- because systems with smaller screens are likely somewhat less powerful
 	-- anyway (netbooks etc)
-	
+
 	-- experimentally determined values that work good:
-	-- 
+	--
 	-- 1920 - 1
 	-- 1280 - 0.8
 	-- 1024 - 0.5
@@ -67,10 +67,10 @@ function play.load()
 end
 function play._load_layer(name)
 
-	
+
 	play.geometry[name] = dofile("assets/geometry/" .. name .. ".lua")
 	local elements = #play.geometry[name].data
-	dbg.info("Loaded layer: '" .. name .. "' (" .. tostring(elements) .. " objects)")	
+	dbg.info("Loaded layer: '" .. name .. "' (" .. tostring(elements) .. " objects)")
 end
 
 function play._load_scheme(name)
@@ -78,7 +78,7 @@ function play._load_scheme(name)
 	-- internal function for loading a scheme.
 	-- schemes are mostly just colors, but can contain some extra
 	-- images for backgrounds etc.
-	
+
 	dbg.info("Loading scheme: '" .. name .. "'")
 	play.scheme[name] = {}
 	play.scheme[name].basepath = "assets/schemes/" .. name .. "/"
@@ -99,7 +99,7 @@ function play.update(dt)
 
 	local offset_x = -0.5947 + player1.currentBlock.x*size_x*2
 	local offset_y = -0.532 + player1.currentBlock.y*size_y*2
-	
+
 	for k,v in pairs(horizontal_particles) do
 		v:update(dt)
 		if (not v:isActive()) and (v:getCount() == 0) then
@@ -137,13 +137,13 @@ function play.draw(debug_draw)
 	-- play.draw
 	-- invoked from main.lua to
 	-- perform all drawing of the gamestate.
-	
+
 	if debug_draw then
 		play._debug_draw()
 	else
 		play._do_draw(skinName)
 	end
-	
+
 	-- todo, put the winometer draws somewhere :D
 	-- play.debug_draw_winometer()
 
@@ -185,10 +185,10 @@ function play._do_draw(scheme_name)
 	-- what scheme/color palette is used to draw everything.
 	-- the schema has to have been previously initialized
 	-- using play._load_scheme().
-	
+
 	-- extract the scheme "folder" table
 	local scheme = play.scheme[scheme_name]
-	
+
 	-- draw background
 	love.graphics.draw(scheme.background)
 
@@ -197,7 +197,7 @@ function play._do_draw(scheme_name)
 	layout.draw_layer(play.geometry.bg_light, scheme)
 	layout.draw_layer(play.geometry.bg_dark, scheme)
 	local x, y, w, h = layout.place_canvas(-0.312, 0, 0.27-0.01, 0.52-0.01)
-	
+
 	-- draw board
 	local board = play._draw_board(field, scheme, w, h, player1, player2, horizontal_append_buffer, vertical_append_buffer)
 
@@ -259,7 +259,7 @@ function play._do_draw(scheme_name)
 	local x, y, w, h = layout.place_canvas(0.312, 0, 0.27-0.01, 0.52-0.01)
 	love.graphics.draw(board, x + w, y + h, math.pi)
 
-	
+
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
 
@@ -270,7 +270,7 @@ function play._do_draw(scheme_name)
 	--same for player2
 	--player1.holdBlock has info for held block(type only)
 	--same for player2
-	
+
 	--types are as follows:{[1]="iblock",[2]="lblock",[3]="jblock",[4]="tblock",[5]="oblock",[6]="zblock",[7]="sblock"}
 	--this shouldn't matter to you at all, but oh well
 
@@ -286,16 +286,16 @@ function play._draw_board(board, scheme, w, h, player1, player2, horizontal_appe
 	local height = h
 	local block_width = width / #board[1]
 	local block_height = height / #board
-	
+
 	-- don't recreate this canvas every time, cache it
 	-- field size can never change in one game.
 	if not canvas then
 		canvas = love.graphics.newCanvas(width, height)
 		dbg.debug("Created " .. width .. "x" .. height .. " canvas.")
 	end
-	
-	canvas:clear(255, 0, 0, 255)
+
 	love.graphics.setCanvas(canvas)
+	love.graphics.clear(255, 0, 0, 255)
 	love.graphics.setShader(play._tile_shader)
 
 	-- draw the actual playfield
