@@ -27,7 +27,7 @@ function love.load(args)
 			if arg == "-skin" then skinName = args[argNum+1] end
 		end
 	end
-	skinName = skinName or "goldfish";
+	skinName = skinName or "clairdelune";
 	require "binding"
 	require "helpfuncs"
 	require "class"
@@ -39,7 +39,7 @@ function love.load(args)
 
 	love.graphics.setBackgroundColor(100,100,100,255)
 	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=FULLSCREEN, vsync=VSYNC})
-	
+
 	play.scheme = {}
 	play._load_scheme('clairdelune')
 	play._load_scheme('adrift')
@@ -51,7 +51,7 @@ function love.load(args)
 	play._load_layer('bg_light')
 	play._load_layer('bg_dark')
 	play._init_shaders()
-	
+
 	game = {play = play,menu = menu}
 	mode = "play"
 	init = true
@@ -83,9 +83,9 @@ function love.update(dt)
 	if game[mode].update then
 		binding.update()
 		game[mode].update(dt)
-	end 
+	end
 	if exit then
-		if game[mode].exit then game[mode].exit() end 
+		if game[mode].exit then game[mode].exit() end
 		exit = false
 		init = true
 	end
@@ -105,4 +105,3 @@ function love.keypressed(key, unicode)
 	-- keypressed[key] = true
 	-- if key == "p" then useShader = not useShader end
 end
-
