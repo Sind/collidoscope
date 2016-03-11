@@ -92,3 +92,18 @@ function layout.img(virtual_x, virtual_y, virtual_width, virtual_height, image)
 		love.graphics.rectangle("fill", phys_x, phys_y, phys_width, phys_height)
 	end
 end
+
+function layout.print(text,virtual_x,virtual_y)
+	local oldFont = love.graphics.getFont();
+	local font = love.graphics.newFont(love.graphics.getWidth()/25)
+	love.graphics.setFont(font)
+	local phys_x, phys_y = layout._virtual_to_physical(virtual_x,virtual_y)
+	local phys_width, phys_height = font:getWidth(text), font:getHeight(text)
+	local scale = 1 --40/phys_height
+	-- if GRID_DEBUG_DRAW then
+	-- 	love.graphics.rectangle("line",phys_x,phys_y,phys_width,phys_height)
+	-- end
+
+	love.graphics.print(text,phys_x,phys_y,0,1,1,phys_width/2,phys_height/2)
+	love.graphics.setFont(oldFont)
+end
