@@ -14,18 +14,22 @@ function layout.percent_y(number)
 	return SCREEN_Y*(number/100)
 end
 
+function layout._physical_to_virtual(physical_x, physical_y)
+	return (physical_x - SCREEN_X/2.0)/(SCREEN_X/2), (physical_y - SCREEN_Y/2)/(SCREEN_X/2)
+end
+
 function layout._virtual_to_physical(virtual_x, virtual_y)
 	-- layout._virtual_to_physical(virtual_x, virtual_y)
 	-- convert from normalized device coordinates
 	-- to "physical" screen coordinates
-	
+
 	return virtual_x*(SCREEN_X/2) + SCREEN_X/2.0, virtual_y*(SCREEN_X/2) + SCREEN_Y/2.0
 end
 
 function layout._virtual_to_physical_dimensions(virtual_x, virtual_y)
 	-- layout._virtual_to_physical_dimensions(virtual_x, virtual_y)
 	-- convert virtual coordinates to physical screen coordinates
-	
+
 	return virtual_x*SCREEN_X, virtual_y*SCREEN_X
 end
 
@@ -36,7 +40,7 @@ function layout.rect(virtual_x, virtual_y, virtual_width, virtual_height)
 
 	local virtual_x = virtual_x - virtual_width
 	local virtual_y = virtual_y - virtual_height
-	
+
 	local phys_x, phys_y = layout._virtual_to_physical(virtual_x, virtual_y)
 	phys_width, phys_height = layout._virtual_to_physical_dimensions(virtual_width, virtual_height)
 	if GRID_DEBUG_DRAW then
@@ -51,7 +55,7 @@ function layout.place_canvas(virtual_x, virtual_y, virtual_width, virtual_height
 	-- specifically for drawing the canvas.
 	local virtual_x = virtual_x - virtual_width
 	local virtual_y = virtual_y - virtual_height
-	
+
 	local phys_x, phys_y = layout._virtual_to_physical(virtual_x, virtual_y)
 	phys_width, phys_height = layout._virtual_to_physical_dimensions(virtual_width, virtual_height)
 	return phys_x, phys_y, phys_width, phys_height
@@ -74,18 +78,17 @@ function layout.img(virtual_x, virtual_y, virtual_width, virtual_height, image)
 
 	local virtual_x = virtual_x - virtual_width
 	local virtual_y = virtual_y - virtual_height
-	
+
 	local phys_x, phys_y = layout._virtual_to_physical(virtual_x, virtual_y)
 	phys_width, phys_height = layout._virtual_to_physical_dimensions(virtual_width, virtual_height)
-	
+
 	q_tr = love.graphics.newQuad(phys_x, phys_y, phys_width, phys_height, 200, 200)
 	q_bl = love.graphics.newQuad(phys_x, phys_y, phys_width, phys_height, 200, 200)
-	
-	
+
+
 	if GRID_DEBUG_DRAW then
 		love.graphics.draw("line", phys_x, phys_y, phys_width, phys_height)
 	else
 		love.graphics.rectangle("fill", phys_x, phys_y, phys_width, phys_height)
 	end
 end
-
