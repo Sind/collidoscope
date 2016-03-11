@@ -1,5 +1,5 @@
 return {
-	color = "highlight",
+	color = "darker",
 	data = {
 
 		{-0.8531, 0, 0.0286-0.012, 0.52-0.012}, -- left score bar

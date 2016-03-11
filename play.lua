@@ -39,7 +39,7 @@ end
 function play.load()
 	playmode = "prepregame"
 	playtimer = 0
-	textblock = {y = -1.2, h = 0.2, w = 1, x = 0}
+	textblock = {y = -1.2, h = 0.2, w = 1.2, x = 0}
 	textblockTween = tween.new(1,textblock,{y = 0},"inOutBack")
 	field = {}
 	for i = 1,FIELD_SIZE_Y do
