@@ -35,7 +35,16 @@ function block:update(dt)
 
 	if binding.pressed["p"..self.parent.playerNum.."u"] then
 		self.rotation = self.rotation%#block_layouts[self.type]+1
-		if self:collides() then self.rotation = (self.rotation-2)%#block_layouts[self.type] + 1 end
+		if self:collides() then
+			self.x = self.x+1
+			if self:collides() then
+				self.x = self.x - 2
+				if self:collides() then
+					self.x = self.x + 1
+					self.rotation = (self.rotation-2)%#block_layouts[self.type] + 1
+				end
+			end
+		end
 	end
 
 	if binding.pressed["p"..self.parent.playerNum.."s"] then
