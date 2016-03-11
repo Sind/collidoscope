@@ -10,18 +10,30 @@ function play._init_shaders()
 	tile_shader = love.graphics.newShader([[
 	extern Image pattern;
 
-        vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
-        {
+	vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
+	{
 		// TODO: the scaling here is just made up for testing, fix it.
 		vec2 st_coords = screen_coords / vec2(1920, 1080)*vec2(8*3, 4*3);
-        	return Texel(pattern, st_coords);
-        }
+		return Texel(pattern, st_coords);
+	}
 	]])
 	local warnings = tile_shader:getWarnings()
 	if warnings ~= "" and warnings ~= "\n" and warnings ~= "pixel shader:\n"then
 		dbg.debug("Tile shader output: '" .. tile_shader:getWarnings() .. "'")
 	end
 	play._tile_shader = tile_shader
+
+	smoke_shader = love.graphics.newShader([[
+	vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
+	{
+		return Texel(texture, texture_coords)*color;
+	}
+	]])
+	local warnings = smoke_shader:getWarnings()
+	if warnings ~= "" and warnings ~= "\n" and warnings ~= "pixel shader:\n"then
+		dbg.debug("Smoke shader output: '" .. smoke_shader:getWarnings() .. "'")
+	end
+	play._smoke_shader = smoke_shader
 end
 
 function play.load()
@@ -247,12 +259,14 @@ function play._do_draw(scheme_name)
 	end
 
 	love.graphics.setCanvas(board)
+	love.graphics.setShader(play._smoke_shader)
 	for k,v in pairs(horizontal_particles) do
 		love.graphics.draw(v)
 	end
 	for k,v in pairs(vertical_particles) do
 		love.graphics.draw(v)
 	end
+	love.graphics.setShader()
 	love.graphics.setCanvas()
 
 	love.graphics.draw(board, x, y)
@@ -319,7 +333,7 @@ function play._draw_board(board, scheme, w, h, player1, player2, horizontal_appe
 	local offset_y = player1.currentBlock.y*block_height
 	for i = 1,#cblock do
 		local v = cblock[i]
-                for j = 1,#cblock[i] do
+		for j = 1,#cblock[i] do
 			local u = cblock[i][j]
 			if u == 1 then
 				love.graphics.rectangle("fill", offset_x + (j-2)*block_width, offset_y + (i-2)*block_height, block_width, block_height)
@@ -362,9 +376,9 @@ function play._compute_edges(board)
 				table.insert(vertical_append_buffer, 1, {x, y-1})
 			end
 			if y ~= board_height then
-			   if not (board[y][x] == board[y+1][x]) then
-			      table.insert(horizontal_append_buffer, 1, {x-1, y})
-			   end
+				if not (board[y][x] == board[y+1][x]) then
+					table.insert(horizontal_append_buffer, 1, {x-1, y})
+				end
 			end
 		end
 	end
