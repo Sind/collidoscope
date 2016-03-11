@@ -56,7 +56,15 @@ function love.load(args)
 	game = {play = play,menu = menu}
 	mode = "play"
 	init = true
+	ourFont = love.graphics.newFont(love.graphics.getWidth()/25)
+	love.graphics.setFont(ourFont)
 end
+
+function love.load2electricboogaloo()
+	mode = "play"
+	init = true
+end
+
 
 last_time = 0
 deltas = {}
@@ -103,6 +111,7 @@ end
 
 function love.keypressed(key, unicode)
 	if key == "escape" then love.event.quit() end
+	if key == "6" then love.load2electricboogaloo{} end
 	-- keypressed[key] = true
 	-- if key == "p" then useShader = not useShader end
 end

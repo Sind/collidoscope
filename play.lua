@@ -38,6 +38,7 @@ end
 
 function play.load()
 	playmode = "prepregame"
+	playtimer = 0
 	textblock = {y = -1.2, h = 0.2, w = 1, x = 0}
 	textblockTween = tween.new(1,textblock,{y = 0},"inOutBack")
 	field = {}
@@ -109,6 +110,7 @@ function play._load_scheme(name)
 	play.scheme[name].pattern_dark:setWrap('repeat', 'repeat')
 end
 function play.update(dt)
+
 	for k,v in pairs(horizontal_particles) do
 		v:update(dt)
 		if (not v:isActive()) and (v:getCount() == 0) then
@@ -143,7 +145,7 @@ function play.update(dt)
 			return
 		end
 	end
-
+	playtimer = playtimer+dt
 	player1:update(dt)
 	player2:update(dt)
 
