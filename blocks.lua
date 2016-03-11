@@ -66,12 +66,12 @@ function block:collides()
 		for j,u in ipairs(v) do
 			if u == 1 then
 				if self.parent.playerNum == 1 then
-					if self.y+i-1 > FIELD_SIZE_Y then return true end
+					if self.y+i-1 > FIELD_SIZE_Y or self.x+j-1 < 1 or self.x+j-1 > FIELD_SIZE_X then return true end
 					if field[self.y+i-1] then
 						if not field[self.y+i-1][self.x+j-1] or field[self.y+i-1][self.x+j-1] == 1 then return true end
 					end
 				else
-					if FIELD_SIZE_Y-self.y-i+2 < 1 then return true end
+					if FIELD_SIZE_Y-self.y-i+2 < 1 or FIELD_SIZE_X-self.x-j+2 < 1 or FIELD_SIZE_X-self.x-j+2 > FIELD_SIZE_X then return true end
 					if field[FIELD_SIZE_Y-self.y-i+2] then
 						if not field[FIELD_SIZE_Y-self.y-i+2][FIELD_SIZE_X-self.x-j+2] or field[FIELD_SIZE_Y-self.y-i+2][FIELD_SIZE_X-self.x-j+2] == 0 then return true end
 					end
