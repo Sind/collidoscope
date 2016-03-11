@@ -37,6 +37,7 @@ function play._init_shaders()
 end
 
 function play.load()
+	playmode = "pregame"
 	field = {}
 	for i = 1,FIELD_SIZE_Y do
 		field[i] = {}
@@ -102,15 +103,6 @@ function play._load_scheme(name)
 	play.scheme[name].pattern_dark:setWrap('repeat', 'repeat')
 end
 function play.update(dt)
-	player1:update(dt)
-	player2:update(dt)
-	if(player1.ended and player2.ended and love.keyboard.isDown(" ")) then exit = true end
-	--update particle systems
-	local size_x = 0.0256
-	local size_y = 0.02534
-
-	local offset_x = -0.5947 + player1.currentBlock.x*size_x*2
-	local offset_y = -0.532 + player1.currentBlock.y*size_y*2
 
 	for k,v in pairs(horizontal_particles) do
 		v:update(dt)
@@ -124,6 +116,20 @@ function play.update(dt)
 			vertical_particles[k] = nil
 		end
 	end
+
+	if playmode == "pregame" then
+		if love.keyboard.isDown("return") then
+			playmode = "game"
+		else
+			return
+		end
+	end
+
+	player1:update(dt)
+	player2:update(dt)
+
+	if(player1.ended and player2.ended and love.keyboard.isDown(" ")) then exit = true end
+	--update particle systems
 end
 
 function play._debug_draw()
@@ -325,10 +331,16 @@ function play._draw_board(board, scheme, w, h, player1, player2, horizontal_appe
 		end
 	end
 
+
+	if playmode == "pregame" then
+
+		love.graphics.setShader()
+		love.graphics.setCanvas()
+		return canvas
+	end
 	-- draw player1s block
 	local cblock = block_layouts[player1.currentBlock.type][player1.currentBlock.rotation]
 	play._tile_shader:send("pattern", scheme.pattern_light)
-
 	local offset_x = player1.currentBlock.x*block_width
 	local offset_y = player1.currentBlock.y*block_height
 	for i = 1,#cblock do
