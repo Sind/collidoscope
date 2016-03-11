@@ -394,11 +394,36 @@ function play._draw_board(board, scheme, w, h, player1, player2, horizontal_appe
 			end
 		end
 	end
-
 	love.graphics.setShader()
 	love.graphics.setCanvas()
+
+	-- Draw p1s nextblock
+	love.graphics.setShader(play._tile_shader)
+	local cblock = block_layouts[player1.nextBlock][1]
+	play._tile_shader:send("pattern", scheme.pattern_light)
+
+	local offset_x, offset_y = 0, 0
+	--print(player1.nextBlock)
+	if player1.nextBlock == "iblock" then
+		offset_x, offset_y = layout._virtual_to_physical(-0.725, -0.44)
+	else
+		offset_x, offset_y = layout._virtual_to_physical(-0.723, -0.427)
+	end
+	local block_width, block_height = block_width*0.5, block_height*0.5
+
+	for i = 1,#cblock do
+		local v = cblock[i]
+		for j = 1,#cblock[i] do
+			local u = cblock[i][j]
+			if u == 1 then
+				love.graphics.rectangle("fill", offset_x + (j-2)*block_width, offset_y + (i-2)*block_height, block_width, block_height)
+			end
+		end
+	end
+
 	return canvas
 end
+
 
 
 

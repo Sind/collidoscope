@@ -70,7 +70,7 @@ function block:update(dt)
 end
 
 function block:collides()
-	local cblock = block_layouts[self.type][self.rotation] 
+	local cblock = block_layouts[self.type][self.rotation]
 	for i,v in ipairs(cblock) do
 		for j,u in ipairs(v) do
 			if u == 1 then
@@ -101,7 +101,7 @@ function block:merge()
 					-- if self.parent.playerNum == 1 then
 					-- 	play.winometer = play.winometer + 1
 					-- else
-					-- 	play.winometer = play.winometer - 1		
+					-- 	play.winometer = play.winometer - 1
 					-- end
 					-- play.restart()
 					-- exit = true
@@ -116,21 +116,25 @@ function block:merge()
 		end
 	end
 	self.parent.hasBlock = false
-	
+
 	love.audio.play(swoosh)
 end
 
 function block:draw()
-	local c = (2-self.parent.playerNum) * 255
+	block.draw(self.x, self.y, self.type, self.parent.playerNum)
+end
+
+function block.draw(x, y, blocktype, rotation, offset, playerNum)
+	local c = (2 - playerNum) * 255
 	love.graphics.setColor(c,c,c)
-	local cblock = block_layouts[self.type][self.rotation]
+	local cblock = block_layouts[blocktype][rotation]
 	for i,v in ipairs(cblock) do
 		for j,u in ipairs(v) do
 			if u == 1 then
-				if self.parent.playerNum == 1 then
-					love.graphics.rectangle("fill", (self.x+j-1)*50, (self.y+i-1)*50, 50, 50)
+				if playerNum == 1 then
+					love.graphics.rectangle("fill", (x + j - 1)*50, (y + i - 1)*50, 50, 50)
 				else
-					love.graphics.rectangle("fill", (FIELD_SIZE_X-self.x-j+2)*50, (FIELD_SIZE_Y-self.y-i+2)*50, 50, 50)
+					love.graphics.rectangle("fill", (FIELD_SIZE_X - x - j + 2)*50, (FIELD_SIZE_Y - y - i + 2)*50, 50, 50)
 				end
 			end
 		end
@@ -219,7 +223,7 @@ block_layouts ={
 			{0,0,0,0},
 			{0,0,0,0}}
 	},
-	zblock =  { 
+	zblock =  {
 		{{1,1,0,0},
 			{0,1,1,0},
 			{0,0,0,0},
