@@ -130,7 +130,7 @@ function play.update(dt)
 		end
 		return
 	elseif playmode == "pregame" then
-		if love.keyboard.isDown("return") then
+		if love.keyboard.isDown("return") or love.keyboard.isDown("space") then
 			playmode = "postpregame"
 			textblockTween = tween.new(1,textblock,{y = -1.2},"inOutBack")
 		end
