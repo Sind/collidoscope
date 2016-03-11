@@ -13,7 +13,7 @@ function smoke.create(x, y, align, block_width, block_height, emission_scaler)
 		smoke:setAreaSpread("uniform", 0, block_height/2)
 	end
 	--smoke:setOffset(0, 0)
-	smoke:setEmissionRate(200*emission_scaler)
+	smoke:setEmissionRate(400*emission_scaler)
 	smoke:setEmitterLifetime(-1)
 	smoke:setParticleLifetime(1.9*emission_scaler)
 	local adjusted = emission_scaler+0.15
