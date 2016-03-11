@@ -35,6 +35,7 @@ function love.load(args)
 	require "player"
 	require "menu"
 	require "play"
+	tween = require "tween"
 	settings = love.filesystem.load("settings.lua")()
 
 	love.graphics.setBackgroundColor(100,100,100,255)

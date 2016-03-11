@@ -37,13 +37,19 @@ function play._init_shaders()
 end
 
 function play.load()
-	playmode = "pregame"
+	playmode = "prepregame"
+	textblock = {y = -1.2, h = 0.2, w = 1, x = 0}
+	textblockTween = tween.new(1,textblock,{y = 0},"inOutBack")
 	field = {}
 	for i = 1,FIELD_SIZE_Y do
 		field[i] = {}
 		for j = 1,FIELD_SIZE_X do
 			field[i][j] = (i <= FIELD_SIZE_Y/2) and 0 or 1
 		end
+	end
+
+	textblock.draw = function()
+
 	end
 
 	play.images = {}
@@ -103,7 +109,6 @@ function play._load_scheme(name)
 	play.scheme[name].pattern_dark:setWrap('repeat', 'repeat')
 end
 function play.update(dt)
-
 	for k,v in pairs(horizontal_particles) do
 		v:update(dt)
 		if (not v:isActive()) and (v:getCount() == 0) then
@@ -117,8 +122,22 @@ function play.update(dt)
 		end
 	end
 
-	if playmode == "pregame" then
+
+	if playmode == "prepregame" then
+		textblockTween:update(dt)
+		if textblockTween.clock >= 1 then
+			playmode = "pregame"
+		end
+		return
+	elseif playmode == "pregame" then
 		if love.keyboard.isDown("return") then
+			playmode = "postpregame"
+			textblockTween = tween.new(1,textblock,{y = -1.2},"inOutBack")
+		end
+		return
+	elseif playmode == "postpregame" then
+		textblockTween:update(dt)
+		if textblockTween.clock >= 1 then
 			playmode = "game"
 		else
 			return
@@ -209,7 +228,6 @@ function play._do_draw(scheme_name)
 
 	-- draw background
 	love.graphics.draw(scheme.background, 0, 0, 0, love.graphics.getWidth()/scheme.background:getWidth(), love.graphics.getHeight()/scheme.background:getHeight())
-
 	-- draw containers
 	layout.draw_layer(play.geometry.containers, scheme)
 	layout.draw_layer(play.geometry.bg_light, scheme)
@@ -279,6 +297,14 @@ function play._do_draw(scheme_name)
 	local x, y, w, h = layout.place_canvas(0.312, 0, 0.27-0.01, 0.52-0.01)
 	love.graphics.draw(board, x + w, y + h, math.pi)
 
+	love.graphics.setColor(scheme.colors["container"])
+	layout.rect(textblock.x,textblock.y,textblock.w,textblock.h)
+
+	love.graphics.setColor(scheme.colors["highlight"])
+	layout.rect(textblock.x,textblock.y,textblock.w - 0.02,textblock.h-0.02)
+	love.graphics.setColor(scheme.colors["darker"])
+	layout.print("Work together to survive for as long as possible",textblock.x,textblock.y-.09)
+	layout.print("Press spacebar to start",textblock.x,textblock.y+.09)
 
 	--play.geometry.bg_light = dofile("assets/geometry/bg_light.lua");love.timer.sleep(0.5)
 
@@ -317,7 +343,6 @@ function play._draw_board(board, scheme, w, h, player1, player2, horizontal_appe
 	love.graphics.setCanvas(canvas)
 	love.graphics.clear(255, 0, 0, 255)
 	love.graphics.setShader(play._tile_shader)
-
 	-- draw the actual playfield
 	for i = #board,1,-1 do
 		for j = #board[i],1,-1 do
@@ -332,7 +357,7 @@ function play._draw_board(board, scheme, w, h, player1, player2, horizontal_appe
 	end
 
 
-	if playmode == "pregame" then
+	if playmode ~= "game" then
 
 		love.graphics.setShader()
 		love.graphics.setCanvas()
