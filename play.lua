@@ -125,6 +125,9 @@ function play.update(dt)
 	end
 
 	if player1.ended or player2.ended then
+		if love.keyboard.isDown("return","space") then
+			init = true
+		end
 		return
 	end
 
@@ -135,7 +138,7 @@ function play.update(dt)
 		end
 		return
 	elseif playmode == "pregame" then
-		if love.keyboard.isDown("return") or love.keyboard.isDown("space") then
+		if love.keyboard.isDown("return","space") then
 			playmode = "postpregame"
 			textblockTween = tween.new(1,textblock,{y = -1.2},"inOutBack")
 		end
