@@ -31,10 +31,9 @@ function love.load(args)
 			if arg == "grid" then GRID_DEBUG_DRAW = true end
 			if arg == "nofs" then FULLSCREEN = false end
 			if arg == "novsync" then VSYNC = false end
-			if arg == "-skin" then skinName = args[argNum+1] end
+			if arg == "-skin" then skinNameArg = args[argNum+1] end
 		end
 	end
-	skinName = skinName or randomSkin();
 	require "binding"
 	require "helpfuncs"
 	require "class"
@@ -44,7 +43,7 @@ function love.load(args)
 	require "play"
 	tween = require "tween"
 	settings = love.filesystem.load("settings.lua")()
-
+	skinName = skinNameArg or randomSkin();
 	love.graphics.setBackgroundColor(100,100,100,255)
 	love.window.setMode(SCREEN_X, SCREEN_Y, {fullscreen=FULLSCREEN, vsync=VSYNC})
 
@@ -70,6 +69,7 @@ end
 function love.load2electricboogaloo()
 	mode = "play"
 	init = true
+	skinName = skinNameArg or randomSkin();
 end
 
 function difficultyCurve(t)
@@ -78,7 +78,7 @@ function difficultyCurve(t)
 		return 1.0
 	else
 		t = t - startOffset
-		return 1.0 + 0.5*(t/20)^2
+		return 1.0 + 0.2*(t/30)^(1.1)
 	end
 end
 
