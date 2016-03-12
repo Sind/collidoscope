@@ -70,6 +70,7 @@ function love.load2electricboogaloo()
 	mode = "play"
 	init = true
 	skinName = skinNameArg or randomSkin();
+	time = 0
 end
 
 function difficultyCurve(t)
