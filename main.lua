@@ -12,6 +12,13 @@ SCREEN_X,SCREEN_Y = love.window.getDesktopDimensions(1)
 local xpercent,ypercent = SCREEN_X/16,SCREEN_Y/9
 VIRTUAL_X,VIRTUAL_Y = math.min(xpercent,ypercent)*16,math.min(xpercent,ypercent)*9
 
+function randomSkin()
+	local randomSkins = {
+		"adrift", "clairdelune", "moon", "sky"
+	}
+	return randomSkins[math.random(#randomSkins)]
+end
+
 function love.load(args)
 	math.randomseed(os.time())
 	DEBUG_DRAW = false
@@ -27,7 +34,7 @@ function love.load(args)
 			if arg == "-skin" then skinName = args[argNum+1] end
 		end
 	end
-	skinName = skinName or "clairdelune";
+	skinName = skinName or randomSkin();
 	require "binding"
 	require "helpfuncs"
 	require "class"
