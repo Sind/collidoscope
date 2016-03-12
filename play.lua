@@ -440,9 +440,9 @@ function play._draw_p1_holdblock(scheme, block_width, block_height)
 	local offset_x, offset_y = 0, 0
 	--print(player1.nextBlock)
 	if player1.nextBlock == "iblock" then
-		offset_x, offset_y = layout._virtual_to_physical(-0.7044 - 0.0206, -0.4175 - 0.0225)
+		offset_x, offset_y = layout._virtual_to_physical(-0.7044 - 0.0206, -0.4175 - 0.0225 + 0.248)
 	else
-		offset_x, offset_y = layout._virtual_to_physical(-0.723, -0.426)
+		offset_x, offset_y = layout._virtual_to_physical(-0.723, -0.426 + 0.248)
 	end
 	local block_width, block_height = block_width*0.5, block_height*0.5
 	for i = 1,#cblock do
@@ -465,7 +465,7 @@ function play._draw_p2_nextblock(scheme, block_width, block_height)
 	local offset_x, offset_y = 0, 0
 	--print(player1.nextBlock)
 	if player2.nextBlock == "iblock" then
-		offset_x, offset_y = layout._virtual_to_physical(0.7044 + 0.001, -0.4175 - 0.02)
+		offset_x, offset_y = layout._virtual_to_physical(0.7044 - 0.008, -0.4175 - 0.02)
 	else
 		offset_x, offset_y = layout._virtual_to_physical(0.7044 - 0.01, -0.426)
 	end
