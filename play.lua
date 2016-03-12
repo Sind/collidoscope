@@ -124,6 +124,9 @@ function play.update(dt)
 		end
 	end
 
+	if player1.ended or player2.ended then
+		return
+	end
 
 	if playmode == "prepregame" then
 		textblockTween:update(dt)
@@ -234,7 +237,7 @@ function play._do_draw(scheme_name)
 	layout.draw_layer(play.geometry.containers, scheme)
 	layout.draw_layer(play.geometry.bg_light, scheme)
 	layout.draw_layer(play.geometry.bg_dark, scheme)
-	local x, y, w, h = layout.place_canvas(-0.312, 0, 0.27-0.01, 0.52-0.01)
+	local x, y, w, h = layout.place_canvas(-0.412, 0, 0.27-0.01, 0.52-0.01)
 
 	-- draw board
 	local board = play._draw_board(field, scheme, w, h, player1, player2, horizontal_append_buffer, vertical_append_buffer)
@@ -296,8 +299,12 @@ function play._do_draw(scheme_name)
 	love.graphics.setCanvas()
 
 	love.graphics.draw(board, x, y)
-	local x, y, w, h = layout.place_canvas(0.312, 0, 0.27-0.01, 0.52-0.01)
+	local x, y, w, h = layout.place_canvas(0.412, 0, 0.27-0.01, 0.52-0.01)
 	love.graphics.draw(board, x + w, y + h, math.pi)
+
+	love.graphics.setColor(scheme.colors["highlight"])
+	layout.print("" .. math.floor(playtimer*10),0,-0.1)
+
 
 	love.graphics.setColor(scheme.colors["container"])
 	layout.rect(textblock.x,textblock.y,textblock.w,textblock.h)
