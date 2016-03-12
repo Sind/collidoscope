@@ -117,7 +117,7 @@ function block:merge()
 	end
 	self.parent.hasBlock = false
 
-	love.audio.play(swoosh)
+	--love.audio.play(swoosh)
 end
 
 function block:draw()
