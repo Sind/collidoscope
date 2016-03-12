@@ -126,7 +126,7 @@ function play.update(dt)
 
 	if player1.ended or player2.ended then
 		if love.keyboard.isDown("return","space") then
-			init = true
+			love.load2electricboogaloo()
 		end
 		return
 	end
