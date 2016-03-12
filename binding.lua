@@ -1,7 +1,7 @@
 binding = {}
 binding.pressed = {}
 binding.isDown = {}
-binding.map = {p1h = "q",      p1s = "tab",   p1u = "w",  p1d = "s",    p1l = "a",    p1r= "d",
+binding.map = {p1h = "2", p1h2 = "q", p1h3 = "3", p1s = "tab",   p1u = "w",  p1d = "s",    p1l = "a",    p1r= "d",
                p2h = "rshift", p2s = "rctrl", p2u = "up", p2d = "down", p2l = "left", p2r= "right",
                start="return"}
 function binding.update()

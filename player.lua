@@ -13,7 +13,7 @@ function player:update(dt)
 		self:spawnBlock()
 		self.hasBlock = true
 	else
-		if binding.pressed["p"..self.playerNum.."h"] then self:shiftBlock() end
+		if binding.pressed["p"..self.playerNum.."h"]  or binding.pressed["p"..self.playerNum.."h2"] or binding.pressed["p"..self.playerNum.."h3"] then self:shiftBlock() end
 		self.currentBlock:update(dt)
 	end
 end

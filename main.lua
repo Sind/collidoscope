@@ -88,8 +88,10 @@ deltas = {}
 framecounter = 0
 time = 0
 function love.update(dt)
-	time = time + dt
-	dt = dt*difficultyCurve(time)
+	if playmode and playmode == "game" then
+		time = time + dt
+		dt = dt*difficultyCurve(time)
+	end
 	local now = love.timer.getTime()
 	local delta = now - last_time
 	table.insert(deltas, 1, delta)
