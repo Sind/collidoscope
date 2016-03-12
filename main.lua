@@ -72,11 +72,23 @@ function love.load2electricboogaloo()
 	init = true
 end
 
+function difficultyCurve(t)
+	local startOffset = 15
+	if t < startOffset then
+		return 1.0
+	else
+		t = t - startOffset
+		return 1.0 + 0.5*(t/20)^2
+	end
+end
 
 last_time = 0
 deltas = {}
 framecounter = 0
+time = 0
 function love.update(dt)
+	time = time + dt
+	dt = dt*difficultyCurve(time)
 	local now = love.timer.getTime()
 	local delta = now - last_time
 	table.insert(deltas, 1, delta)
