@@ -56,7 +56,7 @@ function love.load(args)
 	game = {play = play,menu = menu}
 	mode = "play"
 	init = true
-	ourFont = love.graphics.newFont(love.graphics.getWidth()/25)
+	ourFont = love.graphics.newFont("assets/TlwgMono-Bold.ttf",love.graphics.getWidth()/29)
 	love.graphics.setFont(ourFont)
 end
 
