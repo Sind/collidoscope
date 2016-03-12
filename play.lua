@@ -409,6 +409,9 @@ function play._draw_board(board, scheme, w, h, player1, player2, horizontal_appe
 
 	play._draw_p1_nextblock(scheme, block_width, block_height)
 	play._draw_p2_nextblock(scheme, block_width, block_height)
+	if player1.holdBlock then
+		play._draw_p1_holdblock(scheme, block_width, block_height)
+	end
 
 	return canvas
 end
@@ -437,6 +440,31 @@ function play._draw_p1_nextblock(scheme, block_width, block_height)
 	end
 end
 
+function play._draw_p1_holdblock(scheme, block_width, block_height)
+	love.graphics.setShader(play._tile_shader)
+	local cblock = block_layouts[player1.holdBlock][1]
+	play._tile_shader:send("pattern", scheme.pattern_light)
+
+	local offset_x, offset_y = 0, 0
+	--print(player1.nextBlock)
+	if player1.nextBlock == "iblock" then
+		offset_x, offset_y = layout._virtual_to_physical(-0.7044 - 0.0206, -0.4175 - 0.0225 + 0.248)
+	else
+		offset_x, offset_y = layout._virtual_to_physical(-0.723, -0.426 + 0.248)
+	end
+	local block_width, block_height = block_width*0.5, block_height*0.5
+	for i = 1,#cblock do
+		local v = cblock[i]
+		for j = 1,#cblock[i] do
+			local u = cblock[i][j]
+			if u == 1 then
+				love.graphics.rectangle("fill", offset_x + (j-2)*block_width, offset_y + (i-2)*block_height, block_width, block_height)
+			end
+		end
+	end
+end
+
+
 function play._draw_p2_nextblock(scheme, block_width, block_height)
 	love.graphics.setShader(play._tile_shader)
 	local cblock = block_layouts[player2.nextBlock][1]
@@ -444,8 +472,8 @@ function play._draw_p2_nextblock(scheme, block_width, block_height)
 
 	local offset_x, offset_y = 0, 0
 	--print(player1.nextBlock)
-	if player1.nextBlock == "iblock" then
-		offset_x, offset_y = layout._virtual_to_physical(0.7044 - 0.0206, -0.4175 - 0.4)
+	if player2.nextBlock == "iblock" then
+		offset_x, offset_y = layout._virtual_to_physical(0.7044 - 0.008, -0.4175 - 0.02)
 	else
 		offset_x, offset_y = layout._virtual_to_physical(0.7044 - 0.01, -0.426)
 	end
